@@ -34,8 +34,8 @@ micrositeDataDirectory := (resourceDirectory in Compile).value / "microsite" / "
 
 micrositePalette := Map(
   "brand-primary"     -> "#E35D31",
-  "brand-secondary"   -> "#B24916",
-  "brand-tertiary"    -> "#B24916",
+  "brand-secondary"   -> "#2ab253",
+  "brand-tertiary"    -> "#2ab253",
   "gray-dark"         -> "#453E46",
   "gray"              -> "#837F84",
   "gray-light"        -> "#E3E2E3",
@@ -44,6 +44,7 @@ micrositePalette := Map(
 )
 
 micrositeExtraMdFiles := Map(
+  file("README.md") -> ExtraMdFileConfig("readme.md","home"),
   file("CHANGELOG.md") -> ExtraMdFileConfig("changelog.md", "page", Map("title" -> "changelog", "section" -> "changelog", "position" -> "3")),
   file("LICENSE")      -> ExtraMdFileConfig("license.md",   "page", Map("title" -> "license",   "section" -> "license",   "position" -> "4"))
 )
