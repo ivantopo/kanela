@@ -23,13 +23,13 @@ scalaVersion := "2.12.3"
 micrositeImgDirectory     := baseDirectory.value / "img"
 micrositeName             := "kamon-agent"
 micrositeDescription      := "The Open Source Java Agent for the JVM."
-micrositeAuthor           := "kamon.io"
-micrositeGithubOwner      := "dpsoft"
+micrositeAuthor           := "kamon-io"
+micrositeGithubOwner      := "kamon-io"
 micrositeGithubRepo       := "kamon-agent"
 micrositeGitterChannel    := false
 micrositeBaseUrl          := "/kamon-agent"
 micrositeDocumentationUrl := ""
-micrositeHighlightTheme   := "color-brewer"
+micrositeHighlightTheme   := "monokai"
 micrositeDataDirectory := (resourceDirectory in Compile).value / "microsite" / "data"
 
 micrositePalette := Map(
@@ -44,7 +44,7 @@ micrositePalette := Map(
 )
 
 micrositeExtraMdFiles := Map(
-  file("README.md") -> ExtraMdFileConfig("readme.md","home"),
+  file("README.md") -> ExtraMdFileConfig("index.md", "home", Map("title" -> "Home", "section" -> "home", "position" -> "0")),
   file("CHANGELOG.md") -> ExtraMdFileConfig("changelog.md", "page", Map("title" -> "changelog", "section" -> "changelog", "position" -> "3")),
   file("LICENSE")      -> ExtraMdFileConfig("license.md",   "page", Map("title" -> "license",   "section" -> "license",   "position" -> "4"))
 )
