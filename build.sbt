@@ -20,17 +20,16 @@ name := "kamon-agent-microsite"
 scalaVersion := "2.12.3"
 
 // Settings for sbt-microsites https://47deg.github.io/sbt-microsites/
-micrositeImgDirectory     := baseDirectory.value / "img"
 micrositeName             := "kamon-agent"
-micrositeDescription      := "The Open Source Java Agent for the JVM."
+micrositeDescription      := "Open Source Java Agent for the JVM"
 micrositeAuthor           := "kamon-io"
 micrositeGithubOwner      := "kamon-io"
 micrositeGithubRepo       := "kamon-agent"
 micrositeGitterChannel    := false
 micrositeBaseUrl          := "/kamon-agent"
 micrositeDocumentationUrl := ""
-micrositeHighlightTheme   := "monokai"
-micrositeDataDirectory := (resourceDirectory in Compile).value / "microsite" / "data"
+micrositeHighlightTheme   := "color-brewer"
+micrositeImgDirectory     := baseDirectory.value / "src/main/resources/microsite/img"
 
 micrositePalette := Map(
   "brand-primary"     -> "#E35D31",
