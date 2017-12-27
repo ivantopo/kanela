@@ -44,9 +44,9 @@ micrositePalette := Map(
 
 micrositeExtraMdFiles := Map(
   file("README.md") -> ExtraMdFileConfig("index.md", "home", Map("title" -> "Home", "section" -> "home", "position" -> "0")),
-  file("SCALA-API.md") -> ExtraMdFileConfig("scala-api.md", "page", Map("title" -> "scala-api", "section" -> "scala-api", "position" -> "1")),
-  file("CHANGELOG.md") -> ExtraMdFileConfig("changelog.md", "page", Map("title" -> "changelog", "section" -> "changelog", "position" -> "2")),
-  file("LICENSE")      -> ExtraMdFileConfig("license.md",   "page", Map("title" -> "license",   "section" -> "license",   "position" -> "3"))
+  file("SCALA-API.md") -> ExtraMdFileConfig("scala-api.md", "page", Map("title" -> "Scala-Api", "section" -> "scala-api", "position" -> "1")),
+  file("CHANGELOG.md") -> ExtraMdFileConfig("changelog.md", "page", Map("title" -> "Changelog", "section" -> "changelog", "position" -> "2")),
+  file("LICENSE")      -> ExtraMdFileConfig("license.md",   "page", Map("title" -> "License",   "section" -> "license",   "position" -> "3"))
 )
 
 enablePlugins(MicrositesPlugin)
