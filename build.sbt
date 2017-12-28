@@ -25,11 +25,10 @@ micrositeDescription      := "Open Source Java Agent for the JVM"
 micrositeAuthor           := "kamon-io"
 micrositeGithubOwner      := "kamon-io"
 micrositeGithubRepo       := "kamon-agent"
-micrositeGitterChannel    := false
+micrositeGitterChannel    := true
+micrositeGitterChannelUrl := "kamon-io/Kamon"
 micrositeBaseUrl          := "/kamon-agent"
-micrositeDocumentationUrl := ""
-micrositeHighlightTheme   := "color-brewer"
-micrositeImgDirectory     := baseDirectory.value / "src/main/resources/microsite/img"
+micrositeHighlightTheme   := "atom-one-light"
 
 micrositePalette := Map(
   "brand-primary"     -> "#E35D31",
@@ -43,7 +42,7 @@ micrositePalette := Map(
 )
 
 micrositeExtraMdFiles := Map(
-  file("README.md") -> ExtraMdFileConfig("index.md", "home", Map("title" -> "Home", "section" -> "home", "position" -> "0")),
+  //file("README.md") -> ExtraMdFileConfig("index.md", "home", Map("title" -> "Home", "section" -> "home", "position" -> "0")),
   file("SCALA-API.md") -> ExtraMdFileConfig("scala-api.md", "page", Map("title" -> "Scala-Api", "section" -> "scala-api", "position" -> "1")),
   file("CHANGELOG.md") -> ExtraMdFileConfig("changelog.md", "page", Map("title" -> "Changelog", "section" -> "changelog", "position" -> "2")),
   file("LICENSE")      -> ExtraMdFileConfig("license.md",   "page", Map("title" -> "License",   "section" -> "license",   "position" -> "3"))
