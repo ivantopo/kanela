@@ -22,7 +22,7 @@ in the following example.</p>
 
 <p>Suppose you have a simple worker that perform a simple operation:</p>
 
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#java_0_10525" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_10525" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_10525" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">import java.util.Random;
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link active" data-toggle="tab" href="#java_0_427841" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_427841" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_427841" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">import java.util.Random;
 
 public class Worker {
   private final Random random = new Random();
@@ -31,7 +31,7 @@ public class Worker {
       Thread.sleep((long)(random.nextFloat() * 500));
   }
 }
-</code></pre></div><div class="tab-pane" id="scala_1_10525" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">import scala.util.Random
+</code></pre></div><div class="tab-pane" id="scala_1_427841" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">import scala.util.Random
 
 case class Worker() {
   def performTask(): Unit = Thread.sleep((Random.nextFloat() * 500) toLong)
@@ -40,11 +40,11 @@ case class Worker() {
 
 <p>You might want to mixin it with a type that provide a way to accumulate metrics, such as the following:</p>
 
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#java_0_543468" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_543468" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_543468" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public interface MonitorAware {
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link active" data-toggle="tab" href="#java_0_693657" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_693657" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_693657" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public interface MonitorAware {
     Map&lt;String, List&lt;Long&gt;&gt; execTimings();
     List&lt;Long&gt; addExecTimings(String methodName, long time);
 }
-</code></pre></div><div class="tab-pane" id="scala_1_543468" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">trait MonitorAware {
+</code></pre></div><div class="tab-pane" id="scala_1_693657" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">trait MonitorAware {
   def execTimings: Map[String, Vector[Long]]
   def addExecTimings(methodName: String, time: Long): Vector[Long]
 }
@@ -52,7 +52,7 @@ case class Worker() {
 
 <p>And introduce some transformations in order to modify the bytecode and hook into the internal app.</p>
 
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#java_0_926413" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_926413" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_926413" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">import kamon.agent.api.instrumentation.KamonInstrumentation;
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link active" data-toggle="tab" href="#java_0_987800" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_987800" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_987800" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">import kamon.agent.api.instrumentation.KamonInstrumentation;
 // And other imports !
 public class MonitorInstrumentation extends KamonInstrumentation {
     public MonitorInstrumentation() {
@@ -63,7 +63,7 @@ public class MonitorInstrumentation extends KamonInstrumentation {
         );
     }
 }
-</code></pre></div><div class="tab-pane" id="scala_1_926413" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">import kamon.agent.scala.KamonInstrumentation
+</code></pre></div><div class="tab-pane" id="scala_1_987800" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">import kamon.agent.scala.KamonInstrumentation
 // And other imports !
 class MonitorInstrumentation extends KamonInstrumentation {
   forTargetType(&quot;app.kamon.Worker&quot;) { builder ⇒
@@ -75,7 +75,7 @@ class MonitorInstrumentation extends KamonInstrumentation {
 }
 </code></pre></div></div></div>
 
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#java_0_593589" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_593589" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_593589" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class MonitorMixin implements MonitorAware {
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link active" data-toggle="tab" href="#java_0_112970" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_112970" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_112970" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class MonitorMixin implements MonitorAware {
 
     private Map&lt;String, List&lt;Long&gt;&gt; _execTimings;
 
@@ -99,7 +99,7 @@ class MonitorInstrumentation extends KamonInstrumentation {
         this._execTimings = new ConcurrentHashMap&lt;&gt;();
     }
 }
-</code></pre></div><div class="tab-pane" id="scala_1_593589" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">class MonitorMixin extends MonitorAware {
+</code></pre></div><div class="tab-pane" id="scala_1_112970" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">class MonitorMixin extends MonitorAware {
 
   private var _execTimings: TrieMap[String, CopyOnWriteArrayList[Long]] = _
 
@@ -118,7 +118,7 @@ class MonitorInstrumentation extends KamonInstrumentation {
 }
 </code></pre></div></div></div>
 
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#java_0_476310" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_476310" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_476310" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class WorkerAdvisor {
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link active" data-toggle="tab" href="#java_0_287144" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_287144" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_287144" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class WorkerAdvisor {
 
     @OnMethodEnter
     public static long onMethodEnter() {
@@ -132,7 +132,7 @@ class MonitorInstrumentation extends KamonInstrumentation {
         System.out.println(String.format(&quot;Method %s was executed in %10.2f ns.&quot;, origin, (float) timing));
     }
 }
-</code></pre></div><div class="tab-pane" id="scala_1_476310" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">object WorkerAdvisor {
+</code></pre></div><div class="tab-pane" id="scala_1_287144" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">object WorkerAdvisor {
 
   @OnMethodEnter
   def onMethodEnter(): Long = {
