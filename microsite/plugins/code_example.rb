@@ -24,8 +24,8 @@ module Jekyll
         snippet_id = snippet[:language] + '_' + index.to_s + '_' + id_prefix
 
         navegation_tabs = navegation_tabs +
-          '<li class="nav-item' + active + '">' + 
-            '<a class="nav-link' + active + '" data-toggle="tab" href="#' + snippet_id + '" role="tab">' +
+          '<li class="nav-item' + active + '">' +
+            '<a class="nav-link" data-toggle="tab" href="#' + snippet_id + '" role="tab">' +
               snippet[:label] +
             '</a>' +
           '</li>'
