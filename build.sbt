@@ -31,7 +31,7 @@ micrositeBaseUrl          := "/kamon-agent"
 micrositeHighlightTheme   := "atom-one-light"
 
 micrositePalette := Map(
-  "brand-primary"     -> "#E35D31",
+  "brand-primary"     -> "#42b263",
   "brand-secondary"   -> "#2ab253",
   "brand-tertiary"    -> "#2ab253",
   "gray-dark"         -> "#453E46",
@@ -41,11 +41,11 @@ micrositePalette := Map(
   "white-color"       -> "#FFFFFF"
 )
 
+micrositeConfigYaml := ConfigYml(yamlInline = "code_examples_folder: '_data/examples'")
+
 micrositeExtraMdFiles := Map(
-  //file("README.md") -> ExtraMdFileConfig("index.md", "home", Map("title" -> "Home", "section" -> "home", "position" -> "0")),
-  file("SCALA-API.md") -> ExtraMdFileConfig("scala-api.md", "page", Map("title" -> "Scala-Api", "section" -> "scala-api", "position" -> "1")),
-  file("CHANGELOG.md") -> ExtraMdFileConfig("changelog.md", "page", Map("title" -> "Changelog", "section" -> "changelog", "position" -> "2")),
-  file("LICENSE")      -> ExtraMdFileConfig("license.md",   "page", Map("title" -> "License",   "section" -> "license",   "position" -> "3"))
+  file("CHANGELOG.md") -> ExtraMdFileConfig("changelog.md", "page", Map("title" -> "Changelog", "section" -> "changelog", "position" -> "1")),
+  file("LICENSE")      -> ExtraMdFileConfig("license.md",   "page", Map("title" -> "License",   "section" -> "license",   "position" -> "2"))
 )
 
 enablePlugins(MicrositesPlugin)

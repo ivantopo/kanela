@@ -1,36 +1,23 @@
-# Scala API
-
-## Example
-
-Suppose you have a simple worker that perform a simple operation:
-
-```scala
+// tag:worker:start
 import scala.util.Random
 
 case class Worker() {
   def performTask(): Unit = Thread.sleep((Random.nextFloat() * 500) toLong)
 }
-```
+// tag:worker:end
 
-You might want to mixin it with a type that provide a way to accumulate metrics, such as the following:
-
-```scala
+// tag:mixin:start
 trait MonitorAware {
   def execTimings: Map[String, Vector[Long]]
   def addExecTimings(methodName: String, time: Long): Vector[Long]
 }
-```
+// tag:mixin:end
 
-And introduce some transformations in order to modify the bytecode and hook into the internal app.
 
-```scala
-
+// tag:instrumentation:start
 import kamon.agent.scala.KamonInstrumentation
-
 // And other imports !
-
 class MonitorInstrumentation extends KamonInstrumentation {
-
   forTargetType("app.kamon.Worker") { builder ⇒
     builder
       .withMixin(classOf[MonitorMixin])
@@ -38,10 +25,9 @@ class MonitorInstrumentation extends KamonInstrumentation {
       .build()
   }
 }
+// tag:instrumentation:end
 
-```
-
-```scala
+// tag:mixin-implementation:start
 class MonitorMixin extends MonitorAware {
 
   private var _execTimings: TrieMap[String, CopyOnWriteArrayList[Long]] = _
@@ -59,10 +45,9 @@ class MonitorMixin extends MonitorAware {
   @Initializer
   def init(): Unit = this._execTimings = TrieMap[String, CopyOnWriteArrayList[Long]]()
 }
-```
+// tag:mixin-implementation:end
 
-```scala
-
+// tag:advisor:start
 object WorkerAdvisor {
 
   @OnMethodEnter
@@ -77,5 +62,4 @@ object WorkerAdvisor {
     println(s"Method $origin was executed in $timing ns.")
   }
 }
-
-```
+// tag:advisor:end

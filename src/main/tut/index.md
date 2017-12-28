@@ -4,7 +4,7 @@ title:  "Home"
 section: "home"
 ---
 
-# Kamon Agent <img align="right" src="https://rawgit.com/kamon-io/Kamon/master/kamon-logo.svg" height="150px" style="padding-left: 20px"/>
+# Kamon Agent
 [![Build Status](https://travis-ci.org/kamon-io/kamon-agent.svg?branch=master)](https://travis-ci.org/kamon-io/kamon-agent)
 
 The **kamon-agent** is developed in order to provide a simple way to instrument an application running on the JVM and
@@ -28,96 +28,42 @@ in the following example.
 
 Suppose you have a simple worker that perform a simple operation:
 
-```java
-public class Worker {
-  private final Random random = new java.util.Random();
+{% code_example %}
+{%   language java Example.java tag:worker label:"Java" %}
+{%   language scala Example.scala tag:worker label:"Scala" %}
+{% endcode_example %}
 
-  public void performTask() {
-      Thread.sleep((long)(random.nextFloat() * 500));
-  }   
-}
-```
 
 You might want to mixin it with a type that provide a way to accumulate metrics, such as the following:
-```java
-public interface MonitorAware {
-    Map<String, List<Long>> execTimings();
-    List<Long> addExecTimings(String methodName, long time);
-}
 
-```
+{% code_example %}
+{%   language java Example.java tag:mixin label:"Java" %}
+{%   language scala Example.scala tag:mixin label:"Scala" %}
+{% endcode_example %}
+
 
 And introduce some transformations in order to modify the bytecode and hook into the internal app.
 
-```java
-import kamon.agent.api.instrumentation.KamonInstrumentation;
-
-// And other imports !
-
-public class MonitorInstrumentation extends KamonInstrumentation {
-    public MonitorInstrumentation() {
-        forTargetType(() -> "app.kamon.java.Worker", builder ->
-            builder.withMixin(() -> MonitorMixin.class)
-                   .withAdvisorFor(named("performTask"), () -> WorkerAdvisor.class)
-                   .build()
-        );
-    }
-
-}
-```
-
-```java
-public class MonitorMixin implements MonitorAware {
-
-    private Map<String, List<Long>> _execTimings;
-
-    @Override
-    public List<Long> execTimings(String methodName) {
-        return _execTimings.getOrDefault(methodName, List.empty());
-    }
-
-    @Override
-    public Map<String, List<Long>> execTimings() {
-        return _execTimings;
-    }
-
-    @Override
-    public List<Long> addExecTimings(String methodName, long time) {
-        return this._execTimings.compute(methodName, (key, oldValues) -> Option.of(oldValues).map(vs -> vs.append(time)).getOrElse(List.of(time)));
-    }
-
-    @Initializer
-    public void init() {
-        this._execTimings = new ConcurrentHashMap<>();
-    }
-}
-
-```
-
-```java
-import lombok.val;
-
-public class WorkerAdvisor {
-
-    @OnMethodEnter
-    public static long onMethodEnter() {
-        return System.nanoTime(); // Return current time, entering as parameter in the onMethodExist
-    }
-
-    @OnMethodExit
-    public static void onMethodExit(@This MonitorAware instance, @Enter long start, @Origin String origin) {
-        val timing = System.nanoTime() - start;
-        instance.addExecTimings(origin, timing);
-        System.out.println(String.format("Method %s was executed in %10.2f ns.", origin, (float) timing));
-    }
-}
+{% code_example %}
+{%   language java Example.java tag:instrumentation label:"Java" %}
+{%   language scala Example.scala tag:instrumentation label:"Scala" %}
+{% endcode_example %}
 
 
-```
+{% code_example %}
+{%   language java Example.java tag:mixin-implementation label:"Java" %}
+{%   language scala Example.scala tag:mixin-implementation label:"Scala" %}
+{% endcode_example %}
+
+
+{% code_example %}
+{%   language java Example.java tag:advisor label:"Java" %}
+{%   language scala Example.scala tag:advisor label:"Scala" %}
+{% endcode_example %}
 
 Finally, we need to define a new module in the kamon agent configuration:
 
-```hocon
+```javascript
 kamon.agent {
   modules {
     example-module {
@@ -134,7 +80,7 @@ And you are ready to go!
 
 Next, just run your app with the `kamon-agent` as parameter:
 
-```
+```shell
 java -javaagent:kamon-agent.jar -jar /path/to/footpath-routing-api.jar
 ```
 
