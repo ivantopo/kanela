@@ -16,10 +16,12 @@
 package kamon.agent.util;
 
 import lombok.SneakyThrows;
+import lombok.Value;
 import lombok.val;
 
 import java.util.Properties;
 
+@Value
 public class BuildInfo {
     private static String version;
     private static String timestamp;

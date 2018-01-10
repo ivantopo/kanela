@@ -16,9 +16,12 @@
 
 package kamon.agent;
 
+import lombok.Value;
+
 import java.lang.instrument.Instrumentation;
 
-public final class KamonAgent {
+@Value
+public class KamonAgent {
 
     /**
      * JVM hook to statically load the javaagent at startup.
