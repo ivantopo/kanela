@@ -34,25 +34,11 @@ Suppose you have a simple worker that perform a simple operation:
 {% endcode_example %}
 
 
-You might want to mixin it with a type that provide a way to accumulate metrics, such as the following:
-
-{% code_example %}
-{%   language java Example.java tag:mixin label:"Java" %}
-{%   language scala Example.scala tag:mixin label:"Scala" %}
-{% endcode_example %}
-
-
 And introduce some transformations in order to modify the bytecode and hook into the internal app.
 
 {% code_example %}
 {%   language java Example.java tag:instrumentation label:"Java" %}
 {%   language scala Example.scala tag:instrumentation label:"Scala" %}
-{% endcode_example %}
-
-
-{% code_example %}
-{%   language java Example.java tag:mixin-implementation label:"Java" %}
-{%   language scala Example.scala tag:mixin-implementation label:"Scala" %}
 {% endcode_example %}
 
 
@@ -65,12 +51,14 @@ Finally, we need to define a new module in the kamon agent configuration:
 
 ```javascript
 kamon.agent {
+  show-banner = true
+  log-level = "INFO"
+
   modules {
-    example-module {
-      name = "Example Module"
-      stoppable = false
-      instrumentations = ["app.kamon.instrumentation.MonitorInstrumentation"]
-      within = [ "app.kamon..*" ] // List of patterns to match the types to instrument.
+    time-spent-module {
+          name = "Time Spent Module"
+          instrumentations = ["instrumentation.TimeSpentInstrumentation"]
+          within = ["run..*"]
     }
   }
 }
@@ -78,13 +66,20 @@ kamon.agent {
 
 And you are ready to go!
 
+{% code_example %}
+{%   language java Example.java tag:run label:"Java" %}
+{%   language scala Example.scala tag:run label:"Scala" %}
+{% endcode_example %}
+
 Next, just run your app with the `kamon-agent` as parameter:
 
 ```shell
-java -javaagent:kamon-agent.jar -jar /path/to/footpath-routing-api.jar
+java -javaagent:kamon-agent.jar -jar /path/to/kamon-agent.jar
 ```
 
-There it is! Your app instrumented with kamon-agent ready to introduce kamon under the hook.
+<img class="img-fluid" src="/img/kamon.timespent.png">
+
+There it is! Your app instrumented with kamon-agent ready.
 
 Some other configuration that you can define is indicated in the agent [`reference.conf`](https://github.com/kamon-io/kamon-agent/blob/master/agent/src/main/resources/reference.conf)
 
