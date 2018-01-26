@@ -10,59 +10,20 @@ public class Worker {
 }
 // tag:worker:end
 
-
-// tag:mixin:start
-public interface MonitorAware {
-    Map<String, List<Long>> execTimings();
-    List<Long> addExecTimings(String methodName, long time);
-}
-// tag:mixin:end
-
-
 // tag:instrumentation:start
-import kamon.agent.api.instrumentation.KamonInstrumentation;
-// And other imports !
-public class MonitorInstrumentation extends KamonInstrumentation {
+
+public class TimeSpentInstrumentation extends KamonInstrumentation {
     public MonitorInstrumentation() {
-        forTargetType(() -> "app.kamon.java.Worker", builder ->
-            builder.withMixin(() -> MonitorMixin.class)
-                   .withAdvisorFor(named("performTask"), () -> WorkerAdvisor.class)
+        forTargetType(() -> "run.Worker", builder ->
+            builder.withAdvisorFor(method("performTask"), () -> PerformTaskMethodAdvisor.class)
                    .build()
         );
     }
 }
 // tag:instrumentation:end
 
-
-// tag:mixin-implementation:start
-public class MonitorMixin implements MonitorAware {
-
-    private Map<String, List<Long>> _execTimings;
-
-    @Override
-    public List<Long> execTimings(String methodName) {
-        return _execTimings.getOrDefault(methodName, List.empty());
-    }
-
-    @Override
-    public Map<String, List<Long>> execTimings() {
-        return _execTimings;
-    }
-
-    @Override
-    public List<Long> addExecTimings(String methodName, long time) {
-        return this._execTimings.compute(methodName, (key, oldValues) -> Option.of(oldValues).map(vs -> vs.append(time)).getOrElse(List.of(time)));
-    }
-
-    @Initializer
-    public void init() {
-        this._execTimings = new ConcurrentHashMap<>();
-    }
-}
-// tag:mixin-implementation:end
-
 // tag:advisor:start
-public class WorkerAdvisor {
+public class PerformTaskMethodAdvisor {
 
     @OnMethodEnter
     public static long onMethodEnter() {
@@ -71,9 +32,19 @@ public class WorkerAdvisor {
 
     @OnMethodExit
     public static void onMethodExit(@This MonitorAware instance, @Enter long start, @Origin String origin) {
-        long timing = System.nanoTime() - start;
-        instance.addExecTimings(origin, timing);
-        System.out.println(String.format("Method %s was executed in %10.2f ns.", origin, (float) timing));
+        System.out.println(String.format("Method %s was executed in %10.2f ns.", origin, (float) System.nanoTime() - start));
     }
 }
 // tag:advisor:end
+
+
+
+// tag:run:start
+public class TimeSpentJava {
+    public static void main(String... args) {
+        for(int i = 0; i < 10; i++) {
+            new Worker().performTask();
+        }
+    }
+}
+// tag:run:end

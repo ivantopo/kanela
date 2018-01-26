@@ -22,7 +22,7 @@ in the following example.</p>
 
 <p>Suppose you have a simple worker that perform a simple operation:</p>
 
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_645644" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_645644" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_645644" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">import java.util.Random;
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_989356" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_989356" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_989356" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">import java.util.Random;
 
 public class Worker {
   private final Random random = new Random();
@@ -31,94 +31,34 @@ public class Worker {
       Thread.sleep((long)(random.nextFloat() * 500));
   }
 }
-</code></pre></div><div class="tab-pane" id="scala_1_645644" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">import scala.util.Random
+</code></pre></div><div class="tab-pane" id="scala_1_989356" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">import scala.util.Random
 
-case class Worker() {
+class Worker {
   def performTask(): Unit = Thread.sleep((Random.nextFloat() * 500) toLong)
-}
-</code></pre></div></div></div>
-
-<p>You might want to mixin it with a type that provide a way to accumulate metrics, such as the following:</p>
-
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_901189" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_901189" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_901189" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public interface MonitorAware {
-    Map&lt;String, List&lt;Long&gt;&gt; execTimings();
-    List&lt;Long&gt; addExecTimings(String methodName, long time);
-}
-</code></pre></div><div class="tab-pane" id="scala_1_901189" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">trait MonitorAware {
-  def execTimings: Map[String, Vector[Long]]
-  def addExecTimings(methodName: String, time: Long): Vector[Long]
 }
 </code></pre></div></div></div>
 
 <p>And introduce some transformations in order to modify the bytecode and hook into the internal app.</p>
 
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_447313" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_447313" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_447313" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">import kamon.agent.api.instrumentation.KamonInstrumentation;
-// And other imports !
-public class MonitorInstrumentation extends KamonInstrumentation {
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_231577" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_231577" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_231577" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">
+public class TimeSpentInstrumentation extends KamonInstrumentation {
     public MonitorInstrumentation() {
-        forTargetType(() -&gt; &quot;app.kamon.java.Worker&quot;, builder -&gt;
-            builder.withMixin(() -&gt; MonitorMixin.class)
-                   .withAdvisorFor(named(&quot;performTask&quot;), () -&gt; WorkerAdvisor.class)
+        forTargetType(() -&gt; &quot;run.Worker&quot;, builder -&gt;
+            builder.withAdvisorFor(method(&quot;performTask&quot;), () -&gt; PerformTaskMethodAdvisor.class)
                    .build()
         );
     }
 }
-</code></pre></div><div class="tab-pane" id="scala_1_447313" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">import kamon.agent.scala.KamonInstrumentation
-// And other imports !
-class MonitorInstrumentation extends KamonInstrumentation {
-  forTargetType(&quot;app.kamon.Worker&quot;) { builder ⇒
+</code></pre></div><div class="tab-pane" id="scala_1_231577" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">class TimeSpentInstrumentation extends KamonInstrumentation {
+  forTargetType(&quot;run.Worker&quot;) { builder ⇒
     builder
-      .withMixin(classOf[MonitorMixin])
-      .withAdvisorFor(named(&quot;performTask&quot;), classOf[WorkerAdvisor])
+      .withAdvisorFor(method(&quot;performTask&quot;), classOf[PerformTaskMethodAdvisor])
       .build()
   }
 }
 </code></pre></div></div></div>
 
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_808827" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_808827" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_808827" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class MonitorMixin implements MonitorAware {
-
-    private Map&lt;String, List&lt;Long&gt;&gt; _execTimings;
-
-    @Override
-    public List&lt;Long&gt; execTimings(String methodName) {
-        return _execTimings.getOrDefault(methodName, List.empty());
-    }
-
-    @Override
-    public Map&lt;String, List&lt;Long&gt;&gt; execTimings() {
-        return _execTimings;
-    }
-
-    @Override
-    public List&lt;Long&gt; addExecTimings(String methodName, long time) {
-        return this._execTimings.compute(methodName, (key, oldValues) -&gt; Option.of(oldValues).map(vs -&gt; vs.append(time)).getOrElse(List.of(time)));
-    }
-
-    @Initializer
-    public void init() {
-        this._execTimings = new ConcurrentHashMap&lt;&gt;();
-    }
-}
-</code></pre></div><div class="tab-pane" id="scala_1_808827" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">class MonitorMixin extends MonitorAware {
-
-  private var _execTimings: TrieMap[String, CopyOnWriteArrayList[Long]] = _
-
-  def execTimings: TrieMap[String, CopyOnWriteArrayList[Long]] = this._execTimings
-
-  def execTimings(methodName: String): java.util.List[Long] = this._execTimings.getOrElse(methodName, new CopyOnWriteArrayList())
-
-  def addExecTimings(methodName: String, time: Long): java.util.List[Long] = {
-    val update = this._execTimings.getOrElseUpdate(methodName, new CopyOnWriteArrayList())
-    update.add(time)
-    update
-  }
-
-  @Initializer
-  def init(): Unit = this._execTimings = TrieMap[String, CopyOnWriteArrayList[Long]]()
-}
-</code></pre></div></div></div>
-
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_328113" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_328113" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_328113" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class WorkerAdvisor {
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_208109" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_208109" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_208109" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class PerformTaskMethodAdvisor {
 
     @OnMethodEnter
     public static long onMethodEnter() {
@@ -127,36 +67,32 @@ class MonitorInstrumentation extends KamonInstrumentation {
 
     @OnMethodExit
     public static void onMethodExit(@This MonitorAware instance, @Enter long start, @Origin String origin) {
-        long timing = System.nanoTime() - start;
-        instance.addExecTimings(origin, timing);
-        System.out.println(String.format(&quot;Method %s was executed in %10.2f ns.&quot;, origin, (float) timing));
+        System.out.println(String.format(&quot;Method %s was executed in %10.2f ns.&quot;, origin, (float) System.nanoTime() - start));
     }
 }
-</code></pre></div><div class="tab-pane" id="scala_1_328113" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">object WorkerAdvisor {
+</code></pre></div><div class="tab-pane" id="scala_1_208109" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">object PerformTaskMethodAdvisor {
 
   @OnMethodEnter
-  def onMethodEnter(): Long = {
+  def onMethodEnter(): Long =
     System.nanoTime() // Return current time, entering as parameter in the onMethodExist
-  }
 
   @OnMethodExit
-  def onMethodExit(@This instance: MonitorAware, @Enter start: Long, @Origin origin: String): Unit = {
-    val timing = System.nanoTime() - start
-    instance.addExecTimings(origin, timing)
-    println(s&quot;Method $origin was executed in $timing ns.&quot;)
-  }
+  def onMethodExit(@This instance: MonitorAware, @Enter start: Long, @Origin origin: String): Unit =
+    println(s&quot;Method $origin was executed in ${System.nanoTime() - start} ns.&quot;)
 }
 </code></pre></div></div></div>
 
 <p>Finally, we need to define a new module in the kamon agent configuration:</p>
 
 <div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">kamon</span><span class="p">.</span><span class="nx">agent</span> <span class="p">{</span>
+  <span class="nx">show</span><span class="o">-</span><span class="nx">banner</span> <span class="o">=</span> <span class="kc">true</span>
+  <span class="nx">log</span><span class="o">-</span><span class="nx">level</span> <span class="o">=</span> <span class="s2">"INFO"</span>
+
   <span class="nx">modules</span> <span class="p">{</span>
-    <span class="nx">example</span><span class="o">-</span><span class="nx">module</span> <span class="p">{</span>
-      <span class="nx">name</span> <span class="o">=</span> <span class="s2">"Example Module"</span>
-      <span class="nx">stoppable</span> <span class="o">=</span> <span class="kc">false</span>
-      <span class="nx">instrumentations</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"app.kamon.instrumentation.MonitorInstrumentation"</span><span class="p">]</span>
-      <span class="nx">within</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">"app.kamon..*"</span> <span class="p">]</span> <span class="c1">// List of patterns to match the types to instrument.</span>
+    <span class="nx">time</span><span class="o">-</span><span class="nx">spent</span><span class="o">-</span><span class="nx">module</span> <span class="p">{</span>
+          <span class="nx">name</span> <span class="o">=</span> <span class="s2">"Time Spent Module"</span>
+          <span class="nx">instrumentations</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"instrumentation.TimeSpentInstrumentation"</span><span class="p">]</span>
+          <span class="nx">within</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"run..*"</span><span class="p">]</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
@@ -165,13 +101,29 @@ class MonitorInstrumentation extends KamonInstrumentation {
 
 <p>And you are ready to go!</p>
 
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_601825" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_601825" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_601825" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class TimeSpentJava {
+    public static void main(String... args) {
+        for(int i = 0; i &lt; 10; i++) {
+            new Worker().performTask();
+        }
+    }
+}
+</code></pre></div><div class="tab-pane" id="scala_1_601825" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">object TimeSpent extends App {
+  for(_ &lt;- 1 to 10) {
+    new Worker().performTask()
+  }
+}
+</code></pre></div></div></div>
+
 <p>Next, just run your app with the <code class="highlighter-rouge">kamon-agent</code> as parameter:</p>
 
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>java -javaagent:kamon-agent.jar -jar /path/to/footpath-routing-api.jar
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>java -javaagent:kamon-agent.jar -jar /path/to/kamon-agent.jar
 </code></pre>
 </div>
 
-<p>There it is! Your app instrumented with kamon-agent ready to introduce kamon under the hook.</p>
+<p><img class="img-fluid" src="/img/kamon.timespent.png" /></p>
+
+<p>There it is! Your app instrumented with kamon-agent ready.</p>
 
 <p>Some other configuration that you can define is indicated in the agent <a href="https://github.com/kamon-io/kamon-agent/blob/master/agent/src/main/resources/reference.conf"><code class="highlighter-rouge">reference.conf</code></a></p>
 
