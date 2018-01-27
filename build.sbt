@@ -16,7 +16,7 @@
 
 import microsites._
 
-name := "kamon-agent-microsite"
+name := "kanela-microsite"
 scalaVersion := "2.12.3"
 
 // Settings for sbt-microsites https://47deg.github.io/sbt-microsites/
@@ -27,7 +27,7 @@ micrositeGithubOwner      := "kamon-io"
 micrositeGithubRepo       := "kamon-agent"
 micrositeGitterChannel    := true
 micrositeGitterChannelUrl := "kamon-io/Kamon"
-micrositeBaseUrl          := "/kamon-agent"
+micrositeBaseUrl          := "/kanela"
 micrositeHighlightTheme   := "atom-one-light"
 
 micrositePalette := Map(
