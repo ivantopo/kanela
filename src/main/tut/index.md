@@ -24,7 +24,7 @@ Suppose you have a simple worker that perform a simple operation:
 
 ### Step 1: The Instrumentation
 
-We need introduce a transformation `@Before` and `@After` method execution in order to measure the time spent in the method execution:
+We need introduce a transformation `Before` and `After` method execution in order to measure the time spent in the method execution:
 
 {% code_example %}
 {%   language java Example.java tag:instrumentation label:"Java" %}
@@ -59,7 +59,7 @@ kamon.agent {
 
 ### Step 4: Run!
 
-We make some calls to our `Worker` and also pass the agent as JVM parameter
+We make some calls to our `Worker` and also pass the **Kanela** agent as JVM parameter
 
 {% code_example %}
 {%   language java Example.java tag:run label:"Java" %}
