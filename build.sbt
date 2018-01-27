@@ -20,8 +20,8 @@ name := "kamon-agent-microsite"
 scalaVersion := "2.12.3"
 
 // Settings for sbt-microsites https://47deg.github.io/sbt-microsites/
-micrositeName             := "kamon-agent"
-micrositeDescription      := "Open Source Java Agent for the JVM"
+micrositeName             := "Kanela"
+micrositeDescription      := "Kanela: The Kamon Instrumentation Agent"
 micrositeAuthor           := "kamon-io"
 micrositeGithubOwner      := "kamon-io"
 micrositeGithubRepo       := "kamon-agent"
@@ -44,8 +44,11 @@ micrositePalette := Map(
 micrositeConfigYaml := ConfigYml(yamlInline = "code_examples_folder: '_data/examples'")
 
 micrositeExtraMdFiles := Map(
-  file("CHANGELOG.md") -> ExtraMdFileConfig("changelog.md", "page", Map("title" -> "Changelog", "section" -> "changelog", "position" -> "1")),
-  file("LICENSE")      -> ExtraMdFileConfig("license.md",   "page", Map("title" -> "License",   "section" -> "license",   "position" -> "2"))
+  file("Interceptors.md") -> ExtraMdFileConfig("interceptors.md", "page", Map("title" -> "Interceptors", "section" -> "interceptors", "position" -> "1")),
+  file("Mixins.md") -> ExtraMdFileConfig("mixins.md", "page", Map("title" -> "Mixins", "section" -> "mixins", "position" -> "2")),
+  file("Bridges.md") -> ExtraMdFileConfig("bridges.md", "page", Map("title" -> "Bridges", "section" -> "bridges", "position" -> "3")),
+  file("CHANGELOG.md") -> ExtraMdFileConfig("changelog.md", "page", Map("title" -> "Changelog", "section" -> "changelog", "position" -> "4")),
+  file("LICENSE")      -> ExtraMdFileConfig("license.md",   "page", Map("title" -> "License",   "section" -> "license",   "position" -> "5"))
 )
 
 enablePlugins(MicrositesPlugin)

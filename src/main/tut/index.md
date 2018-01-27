@@ -4,27 +4,16 @@ title:  "Home"
 section: "home"
 ---
 
-# Kamon Agent
+# Kanela: The Kamon Instrumentation Agent
 [![Build Status](https://travis-ci.org/kamon-io/kamon-agent.svg?branch=master)](https://travis-ci.org/kamon-io/kamon-agent)
 
-The **kamon-agent** is developed in order to provide a simple way to instrument an application running on the JVM and
-introduce kamon features such as, creation of traces, metric measures, trace propagation, and so on.
+**Kanela** is a Java Agent written in Java 8+ and powered by [ByteBuddy] with some additionally [ASM] features to provide a simple way to instrument applications running on the `JVM` and allow introduce [Kamon][1] features such as context propagation and metrics.
 
-It's a simple Java Agent written in Java 8 and powered by [ByteBuddy] with some additionally [ASM] features. It has a Pure-Java API and a
-Scala-Friendly API to define the custom instrumentation in a declarative manner.
+## Getting Started
 
-Kamon has several module that need to instrument the app to introduce itself in the internal components. Introducing this Agent,
-you have other way to instrument your `app / library / framework` through a simple and declarative API and get additional features such as
-retransformation of the loaded classes (so it's possible to attach agent on the runtime), revoke the instrumentation
-when the app is in a critical state, and so on.
+The Instrumentation API is written in *Java* but there are [extensions modules][2] to define transformations in idiomatic manner for *Scala* and *Kotlin*.
 
-### How to use the Agent API?
-
-The API has a version for *Java* and other one for *Scala*. To define the transformations you have to extends the
-`KamonInstrumentation` type (picking the Java or the Scala version) and define a new module in the configuration, as you can see
-in the following example.
-
-## Example
+### Time Spent Example([ByteBuddy Advice][3]) in 4 steps
 
 Suppose you have a simple worker that perform a simple operation:
 
@@ -33,21 +22,25 @@ Suppose you have a simple worker that perform a simple operation:
 {%   language scala Example.scala tag:worker label:"Scala" %}
 {% endcode_example %}
 
+### Step 1: The Instrumentation
 
-And introduce some transformations in order to modify the bytecode and hook into the internal app.
+We need introduce a transformation `@Before` and `@After` method execution in order to measure the time spent in the method execution:
 
 {% code_example %}
 {%   language java Example.java tag:instrumentation label:"Java" %}
 {%   language scala Example.scala tag:instrumentation label:"Scala" %}
 {% endcode_example %}
 
+### Step 2: The Method `Advisor`
 
 {% code_example %}
 {%   language java Example.java tag:advisor label:"Java" %}
 {%   language scala Example.scala tag:advisor label:"Scala" %}
 {% endcode_example %}
 
-Finally, we need to define a new module in the kamon agent configuration:
+### Step 3: The Configuration Module
+
+In our `reference.conf/application.conf` we need to define a new configuration module:
 
 ```javascript
 kamon.agent {
@@ -64,22 +57,22 @@ kamon.agent {
 }
 ```
 
-And you are ready to go!
+### Step 4: Run!
+
+We make some calls to our `Worker` and also pass the agent as JVM parameter
 
 {% code_example %}
 {%   language java Example.java tag:run label:"Java" %}
 {%   language scala Example.scala tag:run label:"Scala" %}
 {% endcode_example %}
 
-Next, just run your app with the `kamon-agent` as parameter:
-
 ```shell
-java -javaagent:kamon-agent.jar -jar /path/to/kamon-agent.jar
+java -javaagent:kanela.jar -jar /path/to/our-application.jar
 ```
 
-<img class="img-fluid" src="/img/kamon.timespent.png">
+<img class="img-fluid" src="microsite/img/kamon.timespent.png">
 
-There it is! Your app instrumented with kamon-agent ready.
+There it is! Our application is instrumented with the **Kanela** agent.
 
 Some other configuration that you can define is indicated in the agent [`reference.conf`](https://github.com/kamon-io/kamon-agent/blob/master/agent/src/main/resources/reference.conf)
 
@@ -89,3 +82,7 @@ the [IntelliJ plugin](https://plugins.jetbrains.com/plugin/6317) to add IDE supp
 
 [ByteBuddy]:http://bytebuddy.net/#/
 [ASM]:http://asm.ow2.org/
+
+[1]:http://kamon.io
+[2]:https://github.com/kamon-io/kamon-agent-extensions
+[3]:http://bytebuddy.net/javadoc/1.7.9/net/bytebuddy/asm/Advice.html
