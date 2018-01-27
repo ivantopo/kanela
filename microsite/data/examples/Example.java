@@ -15,8 +15,9 @@ public class Worker {
 public class TimeSpentInstrumentation extends KamonInstrumentation {
     public MonitorInstrumentation() {
         forTargetType(() -> "run.Worker", builder ->
-            builder.withAdvisorFor(method("performTask"), () -> PerformTaskMethodAdvisor.class)
-                   .build()
+            builder
+              .withAdvisorFor(method("performTask"), () -> PerformTaskMethodAdvisor.class)
+              .build()
         );
     }
 }
@@ -24,7 +25,6 @@ public class TimeSpentInstrumentation extends KamonInstrumentation {
 
 // tag:advisor:start
 public class PerformTaskMethodAdvisor {
-
     @OnMethodEnter
     public static long onMethodEnter() {
         return System.nanoTime(); // Return current time, entering as parameter in the onMethodExist
@@ -48,3 +48,31 @@ public class TimeSpent {
     }
 }
 // tag:run:end
+
+//Interceptors
+// tag:instrumentation-interceptor:start
+public class TimeSpentInstrumentation extends KamonInstrumentation {
+    public MonitorInstrumentation() {
+        forTargetType(() -> "run.Worker", builder ->
+            builder
+              .withInterceptorFor(method("performTask"), () -> PerformTaskMethodAdvisor.class)
+              .build()
+        );
+    }
+}
+// tag:instrumentation-interceptor:end
+
+// tag:interceptor:start
+public class PerformTaskMethodInterceptor {
+    @RuntimeType
+    public Object around(@SuperCall Callable<?> callable, @Origin String origin) {
+        final long start = System.nanoTime();
+        try {
+            return callable.call();
+        } finally {
+            final float timeSpent = (float) System.nanoTime() - start;
+            System.out.println(String.format("Method %s was executed in %10.2f ns.", origin, timeSpent));
+        }
+    }
+}
+// tag:interceptor:end
