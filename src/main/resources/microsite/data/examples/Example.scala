@@ -18,7 +18,6 @@ class TimeSpentInstrumentation extends KamonInstrumentation {
 
 // tag:advisor:start
 object PerformTaskMethodAdvisor {
-
   @OnMethodEnter
   def onMethodEnter(): Long =
     System.nanoTime() // Return current time, entering as parameter in the onMethodExist
@@ -36,3 +35,27 @@ object TimeSpent extends App {
   }
 }
 // tag:run:end
+
+//Interceptor
+
+// tag:instrumentation-interceptor:start
+class TimeSpentInstrumentation extends KamonInstrumentation {
+  forTargetType("run.Worker") { builder ⇒
+    builder
+      .withInterceptorFor(method("performTask"), PerformTaskMethodInterceptor)
+      .build()
+  }
+}
+// tag:instrumentation-interceptor:end
+
+// tag:interceptor:start
+object PerformTaskMethodInterceptor {
+  @RuntimeType
+  def around(@SuperCall callable: Callable[_], @Origin origin:String): Any = {
+    val start = System.nanoTime()
+    try callable.call() finally {
+      println(s"Method $origin was executed in ${System.nanoTime() - start} ns.")
+    }
+  }
+}
+// tag:interceptor:end
