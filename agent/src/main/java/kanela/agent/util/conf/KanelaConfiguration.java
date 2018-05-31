@@ -44,6 +44,7 @@ import static java.text.MessageFormat.format;
 @Value
 public class KanelaConfiguration {
     Boolean debugMode;
+    ProfilerConfig profiler;
     DumpConfig dump;
     CircuitBreakerConfig circuitBreakerConfig;
     OldGarbageCollectorConfig oldGarbageCollectorConfig;
@@ -54,7 +55,7 @@ public class KanelaConfiguration {
     Config config;
     Set<String> manifestProperties;
 
-    private static class Holder {
+  private static class Holder {
         private static final KanelaConfiguration Instance = new KanelaConfiguration();
     }
 
@@ -67,6 +68,7 @@ public class KanelaConfiguration {
         this.debugMode = getDebugMode(config);
         this.showBanner = getShowBanner(config);
         this.extraParams = new HashMap();
+        this.profiler = new ProfilerConfig(config);
         this.dump = new DumpConfig(config);
         this.circuitBreakerConfig = new CircuitBreakerConfig(config);
         this.oldGarbageCollectorConfig =  new OldGarbageCollectorConfig(config);
@@ -123,6 +125,18 @@ public class KanelaConfiguration {
 
         public boolean shouldSupportLegacyBytecode() {
             return legacyBytecodeSupport;
+        }
+    }
+
+    @Value
+    public class ProfilerConfig {
+        String withinPackage;
+        Boolean enabled;
+
+        ProfilerConfig(Config config) {
+          val configProfiler = config.getConfig("profiler");
+          this.withinPackage = getWithinConfiguration(configProfiler);
+          this.enabled = Try.of(() -> configProfiler.getBoolean("enabled")).getOrElse(true);
         }
     }
 
