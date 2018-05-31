@@ -22,6 +22,7 @@ import java.lang.instrument.Instrumentation;
 import java.nio.file.Files;
 import kanela.agent.api.instrumentation.listener.DebugInstrumentationListener;
 import kanela.agent.api.instrumentation.listener.DefaultInstrumentationListener;
+import kanela.agent.api.instrumentation.listener.dumper.ClassDumperListener;
 import kanela.agent.cache.PoolStrategyCache;
 import kanela.agent.profiler.instrumentation.advisor.ProfilerAdvisor;
 import kanela.agent.resubmitter.PeriodicResubmitter;
@@ -36,6 +37,7 @@ import lombok.experimental.NonFinal;
 import lombok.val;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.agent.builder.AgentBuilder;
+import net.bytebuddy.agent.builder.AgentBuilder.RedefinitionStrategy;
 import net.bytebuddy.agent.builder.ResettableClassFileTransformer;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
@@ -85,16 +87,17 @@ public class ProfilerInstrumenter {
         .with(MethodGraph.Compiler.ForDeclaredMethods.INSTANCE);
 
     val agentBuilder = new AgentBuilder.Default(byteBuddy)
-        .with(poolStrategyCache)
+        .with(new PoolStrategyCache())
         .disableClassFormatChanges() // enable restrictions imposed by most VMs and also HotSpot.
-        .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
-        .withResubmission(PeriodicResubmitter.instance())
+//        .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
+//        .withResubmission(PeriodicResubmitter.instance())
         .enableBootstrapInjection(instrumentation, getTempDir("kanela-profiler"))
         .ignore(not(nameMatches(withinPackages)))
         .or(any(), isExtensionClassLoader())
         .or(any(), isKanelaClassLoader())
         .or(any(), isGroovyClassLoader())
         .or(any(), isReflectionClassLoader())
+        .with(ClassDumperListener.instance())
         .with(DefaultInstrumentationListener.instance())
         .with(new AgentBuilder.Listener.Compound(DebugInstrumentationListener.instance()))
         .type(typeDescription)
@@ -120,7 +123,7 @@ public class ProfilerInstrumenter {
   }
 
   public synchronized void deactivate() {
-    resettableTransformer.forEach((transformer) -> transformer.reset(this.instrumentation, AgentBuilder.RedefinitionStrategy.RETRANSFORMATION));
+    resettableTransformer.forEach((transformer) -> transformer.reset(this.instrumentation, RedefinitionStrategy.REDEFINITION));
     resettableTransformer = Option.none();
       Logger.info(() -> "Instrumentation of Profiler was deactivated");
   }

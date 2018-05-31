@@ -41,7 +41,7 @@ public class PoolStrategyCache extends AgentBuilder.PoolStrategy.WithTypePoolCac
 
     Map<ClassLoader, TypePool.CacheProvider> cache;
 
-    private PoolStrategyCache() {
+    public PoolStrategyCache() {
         super(TypePool.Default.ReaderMode.EXTENDED);
         ExpiringMap.setThreadFactory(NamedThreadFactory.instance("strategy-cache-listener"));
         this.cache = ExpiringMap

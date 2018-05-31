@@ -28,8 +28,9 @@ public class JavaMainWithAgent {
 
     private static Logger logger = LoggerFactory.getLogger(JavaMainWithAgent.class);
 
-    public static void main(String[] args) {
-        logger.info("Start Run Agent Test with Java instrumentation version");
+    public static void main(String[] args) throws InterruptedException {
+      Thread.sleep(2000);
+      logger.info("Start Run Agent Test with Java instrumentation version");
         val worker = FakeWorker.newInstance();
         IntStream.rangeClosed(1, 8)
                 .forEach((int value) -> {
