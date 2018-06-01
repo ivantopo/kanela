@@ -27,7 +27,6 @@ import kanela.agent.profiler.KanelaProfiler;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Value;
-import lombok.experimental.NonFinal;
 
 @Value
 @NoArgsConstructor
@@ -35,22 +34,31 @@ import lombok.experimental.NonFinal;
 public class ProfilerStopHandler extends RouterNanoHTTPD.DefaultHandler {
 
     @Override
-    public String getText() { return null; }
+    public String getText() {
+        return null;
+    }
 
     @Override
-    public String getMimeType() { return "application/json"; }
+    public String getMimeType() {
+        return "application/json";
+    }
 
     @Override
-    public NanoHTTPD.Response.IStatus getStatus() { return Status.OK;}
+    public NanoHTTPD.Response.IStatus getStatus() {
+        return Status.OK;
+    }
 
     @Override
-    public NanoHTTPD.Response get(RouterNanoHTTPD.UriResource uriResource, Map<String, String> urlParams, NanoHTTPD.IHTTPSession session) {
+    public NanoHTTPD.Response get(RouterNanoHTTPD.UriResource uriResource,
+        Map<String, String> urlParams, NanoHTTPD.IHTTPSession session) {
         return getProfiler(uriResource)
             .map((profiler) -> {
                 profiler.stop();
-                return newFixedLengthResponse(Status.OK, "application/json", "{\"message\": \"Profiler deactivated...\"");
+                return newFixedLengthResponse(Status.OK, "application/json",
+                    "{\"message\": \"Profiler deactivated...\"");
             })
-            .getOrElse(() -> newFixedLengthResponse(Status.SERVICE_UNAVAILABLE, "application/json", "{\"cause\": \"Profiler wasn't started...\""));
+            .getOrElse(() -> newFixedLengthResponse(Status.SERVICE_UNAVAILABLE, "application/json",
+                "{\"cause\": \"Profiler wasn't started...\""));
     }
 
     private Option<KanelaProfiler> getProfiler(UriResource uriResource) {

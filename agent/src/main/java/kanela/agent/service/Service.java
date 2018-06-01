@@ -35,63 +35,67 @@ import java.util.concurrent.Executors;
 @EqualsAndHashCode(callSuper = false)
 public class Service extends RouterNanoHTTPD {
 
-  private KanelaProfiler kanelaProfiler;
+    private KanelaProfiler kanelaProfiler;
 
-  private Service(KanelaProfiler kanelaProfiler) {
-    super(9091);
-    this.kanelaProfiler = kanelaProfiler;
-    addMappings();
-    setAsyncRunner(new BoundRunner(Executors.newFixedThreadPool(2)));
-  }
-
-  public static Service of(KanelaProfiler kanelaProfiler) {
-    return new Service(kanelaProfiler);
-  }
-
-  @Override
-  public void addMappings() {
-    super.addMappings();
-
-    addRoute("/profiler/start", ProfilerStartHandler.class, kanelaProfiler);
-    addRoute("/profiler/stop", ProfilerStopHandler.class, kanelaProfiler);
-  }
-
-
-  public void run() {
-    try {
-      this.start(NanoHTTPD.SOCKET_READ_TIMEOUT, true);
-      Logger.info(() -> "\nHttp server running! Point your browers to http://localhost:" + 9091 + "/ \n");
-    } catch (IOException e) {
-      e.printStackTrace();
+    private Service(KanelaProfiler kanelaProfiler) {
+        super(9091);
+        this.kanelaProfiler = kanelaProfiler;
+        addMappings();
+        setAsyncRunner(new BoundRunner(Executors.newFixedThreadPool(2)));
     }
-  }
 
-  private class BoundRunner implements AsyncRunner {
-    private ExecutorService executorService;
-    private final List<NanoHTTPD.ClientHandler> running = Collections.synchronizedList(new ArrayList<NanoHTTPD.ClientHandler>());
-
-    public BoundRunner(ExecutorService executorService) {
-      this.executorService = executorService;
+    public static Service of(KanelaProfiler kanelaProfiler) {
+        return new Service(kanelaProfiler);
     }
 
     @Override
-    public void closeAll() {
-      // copy of the list for concurrency
-      for (NanoHTTPD.ClientHandler clientHandler : new ArrayList<>(this.running)) {
-        clientHandler.close();
-      }
+    public void addMappings() {
+        super.addMappings();
+
+        addRoute("/profiler/start", ProfilerStartHandler.class, kanelaProfiler);
+        addRoute("/profiler/stop", ProfilerStopHandler.class, kanelaProfiler);
     }
 
-    @Override
-    public void closed(NanoHTTPD.ClientHandler clientHandler) {
-      this.running.remove(clientHandler);
+
+    public void run() {
+        try {
+            this.start(NanoHTTPD.SOCKET_READ_TIMEOUT, true);
+            Logger.info(
+                () -> "\nHttp server running! Point your browers to http://localhost:" + 9091
+                    + "/ \n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Override
-    public void exec(NanoHTTPD.ClientHandler clientHandler) {
-      executorService.submit(clientHandler);
-      this.running.add(clientHandler);
+    private class BoundRunner implements AsyncRunner {
+
+        private ExecutorService executorService;
+        private final List<NanoHTTPD.ClientHandler> running = Collections
+            .synchronizedList(new ArrayList<>());
+
+        public BoundRunner(ExecutorService executorService) {
+            this.executorService = executorService;
+        }
+
+        @Override
+        public void closeAll() {
+            // copy of the list for concurrency
+            for (NanoHTTPD.ClientHandler clientHandler : new ArrayList<>(this.running)) {
+                clientHandler.close();
+            }
+        }
+
+        @Override
+        public void closed(NanoHTTPD.ClientHandler clientHandler) {
+            this.running.remove(clientHandler);
+        }
+
+        @Override
+        public void exec(NanoHTTPD.ClientHandler clientHandler) {
+            executorService.submit(clientHandler);
+            this.running.add(clientHandler);
+        }
     }
-  }
 }
 
