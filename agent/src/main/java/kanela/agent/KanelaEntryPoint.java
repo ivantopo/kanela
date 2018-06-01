@@ -19,6 +19,7 @@ package kanela.agent;
 import kanela.agent.circuitbreaker.SystemThroughputCircuitBreaker;
 import kanela.agent.profiler.KanelaProfiler;
 import kanela.agent.reinstrument.Reinstrumenter;
+import kanela.agent.service.Service;
 import kanela.agent.util.BootstrapInjector;
 import kanela.agent.util.ExtensionLoader;
 import kanela.agent.util.banner.KanelaBanner;
@@ -53,16 +54,7 @@ public class KanelaEntryPoint {
                 Reinstrumenter.attach(instrumentation, configuration, transformers);
                 OldGarbageCollectorListener.attach(configuration.getOldGarbageCollectorConfig());
                 SystemThroughputCircuitBreaker.attach(configuration.getCircuitBreakerConfig());
-
-                new Thread(() -> {
-                  try {
-                    Thread.sleep(1000);
-                    val profiler = KanelaProfiler.of(instrumentation, configuration.getProfiler());
-                    profiler.start();
-                  } catch (InterruptedException e) {
-                    e.printStackTrace();
-                  }
-                }).start();
+                Service.of(KanelaProfiler.of(instrumentation, configuration.getProfiler())).run();
             });
         });
     }

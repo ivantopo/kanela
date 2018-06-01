@@ -1,12 +1,13 @@
 package kanela.agent.profiler;
 
+import io.vavr.control.Option;
 import java.lang.instrument.Instrumentation;
 import kanela.agent.profiler.instrumentation.ProfilerInstrumenter;
 import kanela.agent.util.annotation.Experimental;
 import kanela.agent.util.conf.KanelaConfiguration.ProfilerConfig;
 import kanela.agent.util.log.Logger;
+import lombok.SneakyThrows;
 import lombok.Value;
-import lombok.val;
 
 @Value
 @Experimental
@@ -30,12 +31,29 @@ public class KanelaProfiler {
   }
 
   public void start() {
-      // FIXME improve!
-      if (profilerConfig.getEnabled())
-        this.profilerInstrumenter.activate();
-      else {
-        Logger.debug(() -> "Profiler is disabled");
-      }
+      checkEnable(this.profilerInstrumenter::activate,
+          () -> Logger.debug(() -> "Profiler is disabled"));
+  }
+
+  public void stop() {
+      checkEnable(this.profilerInstrumenter::deactivate,
+          () -> Logger.debug(() -> "Profiler is disabled"));
+  }
+
+  @SneakyThrows
+  public void checkEnable(Runnable runnable, Option<Runnable> fallback) {
+      if (profilerConfig.getEnabled()) runnable.run();
+      else fallback.forEach(Runnable::run);
+  }
+
+  @SneakyThrows
+  public void checkEnable(Runnable runnable) {
+      checkEnable(runnable, Option.none());
+  }
+
+  @SneakyThrows
+  public void checkEnable(Runnable runnable, Runnable fallback) {
+      checkEnable(runnable, Option.of(fallback));
   }
 
 
