@@ -20,6 +20,7 @@ import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response.Status;
 import fi.iki.elonen.router.RouterNanoHTTPD;
+import fi.iki.elonen.router.RouterNanoHTTPD.UriResource;
 import io.vavr.control.Option;
 import java.util.Map;
 import kanela.agent.profiler.KanelaProfiler;
@@ -33,29 +34,26 @@ import lombok.experimental.NonFinal;
 @EqualsAndHashCode(callSuper = false)
 public class ProfilerStopHandler extends RouterNanoHTTPD.DefaultHandler {
 
-  @NonFinal
-  private static volatile Option<KanelaProfiler> kanelaProfiler = Option.none();
+    @Override
+    public String getText() { return null; }
 
-  @Override
-  public String getText() { return null; }
+    @Override
+    public String getMimeType() { return "application/json"; }
 
-  @Override
-  public String getMimeType() { return "application/json"; }
+    @Override
+    public NanoHTTPD.Response.IStatus getStatus() { return Status.OK;}
 
-  @Override
-  public NanoHTTPD.Response.IStatus getStatus() { return Status.OK;}
+    @Override
+    public NanoHTTPD.Response get(RouterNanoHTTPD.UriResource uriResource, Map<String, String> urlParams, NanoHTTPD.IHTTPSession session) {
+        return getProfiler(uriResource)
+            .map((profiler) -> {
+                profiler.stop();
+                return newFixedLengthResponse(Status.OK, "application/json", "{\"message\": \"Profiler deactivated...\"");
+            })
+            .getOrElse(() -> newFixedLengthResponse(Status.SERVICE_UNAVAILABLE, "application/json", "{\"cause\": \"Profiler wasn't started...\""));
+    }
 
-  @Override
-  public NanoHTTPD.Response get(RouterNanoHTTPD.UriResource uriResource, Map<String, String> urlParams, NanoHTTPD.IHTTPSession session) {
-      return kanelaProfiler
-          .map((profiler) -> {
-              profiler.stop();
-              return newFixedLengthResponse(Status.OK, "application/json", "{\"message\": \"Profiler deactivated...\"");
-          })
-          .getOrElse(() -> newFixedLengthResponse(Status.SERVICE_UNAVAILABLE, "application/json", "{\"cause\": \"Profiler wasn't started...\""));
-  }
-
-  public static void setKanelaProfiler(KanelaProfiler kanelaProfiler) {
-      ProfilerStopHandler.kanelaProfiler = Option.of(kanelaProfiler);
-  }
+    private Option<KanelaProfiler> getProfiler(UriResource uriResource) {
+        return Option.of(uriResource.initParameter(0, KanelaProfiler.class));
+    }
 }

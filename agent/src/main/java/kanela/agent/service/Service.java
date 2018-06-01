@@ -52,10 +52,8 @@ public class Service extends RouterNanoHTTPD {
   public void addMappings() {
     super.addMappings();
 
-    addRoute("/profiler/start", ProfilerStartHandler.class);
-    ProfilerStartHandler.setKanelaProfiler(kanelaProfiler);
-    addRoute("/profiler/stop", ProfilerStopHandler.class);
-    ProfilerStopHandler.setKanelaProfiler(kanelaProfiler);
+    addRoute("/profiler/start", ProfilerStartHandler.class, kanelaProfiler);
+    addRoute("/profiler/stop", ProfilerStopHandler.class, kanelaProfiler);
   }
 
 
