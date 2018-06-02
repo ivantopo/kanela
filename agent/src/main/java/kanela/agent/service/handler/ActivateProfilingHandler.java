@@ -1,18 +1,3 @@
-/*
- * =========================================================================================
- * Copyright © 2013-2018 the kamon project <http://kamon.io/>
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
- * except in compliance with the License. You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the
- * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language governing permissions
- * and limitations under the License.
- * =========================================================================================
- */
 package kanela.agent.service.handler;
 
 import static fi.iki.elonen.NanoHTTPD.newFixedLengthResponse;
@@ -31,7 +16,7 @@ import lombok.Value;
 @Value
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ProfilerStopHandler extends RouterNanoHTTPD.DefaultHandler {
+public class ActivateProfilingHandler extends RouterNanoHTTPD.DefaultHandler {
 
     @Override
     public String getText() {
@@ -45,7 +30,7 @@ public class ProfilerStopHandler extends RouterNanoHTTPD.DefaultHandler {
 
     @Override
     public NanoHTTPD.Response.IStatus getStatus() {
-        return Status.OK;
+        return NanoHTTPD.Response.Status.OK;
     }
 
     @Override
@@ -53,12 +38,12 @@ public class ProfilerStopHandler extends RouterNanoHTTPD.DefaultHandler {
         Map<String, String> urlParams, NanoHTTPD.IHTTPSession session) {
         return getProfiler(uriResource)
             .map((profiler) -> {
-                profiler.stop();
+                profiler.activate();
                 return newFixedLengthResponse(Status.OK, "application/json",
-                    "{\"message\": \"Profiler deactivated...\"");
+                    "{\"message\": \"Profiler is activated...\"");
             })
             .getOrElse(() -> newFixedLengthResponse(Status.SERVICE_UNAVAILABLE, "application/json",
-                "{\"cause\": \"Profiler wasn't started...\""));
+                "{\"cause\": \"Profiler was not attached...\""));
     }
 
     private Option<KanelaProfiler> getProfiler(UriResource uriResource) {

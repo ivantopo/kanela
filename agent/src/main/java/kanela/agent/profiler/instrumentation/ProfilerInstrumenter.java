@@ -135,10 +135,7 @@ public class ProfilerInstrumenter {
 
     public synchronized void activate() {
         Logger.trace(() -> "Activating profiler instrumentation...");
-        if (this.isActivated()) {
-            Logger.debug(
-                () -> "Trying to activate the instrumentation of Profiler when it was already activated");
-        } else {
+        if (!this.isActivated()) {
             this.resettableTransformer = Option
                 .of(agentBuilder.apply().installOn(this.instrumentation));
             Logger.info(() -> "Instrumentation of Profiler was activated");

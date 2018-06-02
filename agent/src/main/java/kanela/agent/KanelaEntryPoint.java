@@ -16,6 +16,9 @@
 
 package kanela.agent;
 
+import static kanela.agent.util.Execution.runWithTimeSpent;
+
+import java.lang.instrument.Instrumentation;
 import kanela.agent.circuitbreaker.SystemThroughputCircuitBreaker;
 import kanela.agent.profiler.KanelaProfiler;
 import kanela.agent.reinstrument.Reinstrumenter;
@@ -28,10 +31,6 @@ import kanela.agent.util.conf.KanelaConfiguration;
 import kanela.agent.util.jvm.OldGarbageCollectorListener;
 import lombok.Value;
 import lombok.val;
-
-import java.lang.instrument.Instrumentation;
-
-import static kanela.agent.util.Execution.runWithTimeSpent;
 
 @Value
 public class KanelaEntryPoint {
@@ -54,6 +53,7 @@ public class KanelaEntryPoint {
                 Reinstrumenter.attach(instrumentation, configuration, transformers);
                 OldGarbageCollectorListener.attach(configuration.getOldGarbageCollectorConfig());
                 SystemThroughputCircuitBreaker.attach(configuration.getCircuitBreakerConfig());
+                KanelaProfiler.attach();
                 Service.of(KanelaProfiler.of(instrumentation, configuration.getProfiler())).run();
             });
         });

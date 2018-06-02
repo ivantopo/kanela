@@ -18,8 +18,10 @@ package kanela.agent.service;
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.router.RouterNanoHTTPD;
 import kanela.agent.profiler.KanelaProfiler;
-import kanela.agent.service.handler.ProfilerStartHandler;
-import kanela.agent.service.handler.ProfilerStopHandler;
+import kanela.agent.service.handler.ActivateProfilingHandler;
+import kanela.agent.service.handler.DeactivateProfilingHandler;
+import kanela.agent.service.handler.StartProfilingHandler;
+import kanela.agent.service.handler.StopProfilingHandler;
 import kanela.agent.util.log.Logger;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
@@ -52,8 +54,10 @@ public class Service extends RouterNanoHTTPD {
     public void addMappings() {
         super.addMappings();
 
-        addRoute("/profiler/start", ProfilerStartHandler.class, kanelaProfiler);
-        addRoute("/profiler/stop", ProfilerStopHandler.class, kanelaProfiler);
+        addRoute("/profiler/activate", ActivateProfilingHandler.class, kanelaProfiler);
+        addRoute("/profiler/deactivate", DeactivateProfilingHandler.class, kanelaProfiler);
+        addRoute("/profiler/start", StartProfilingHandler.class, kanelaProfiler);
+        addRoute("/profiler/stop", StopProfilingHandler.class, kanelaProfiler);
     }
 
 

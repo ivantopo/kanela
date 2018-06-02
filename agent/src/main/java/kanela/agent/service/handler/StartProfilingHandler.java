@@ -31,7 +31,7 @@ import lombok.Value;
 @Value
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class ProfilerStartHandler extends RouterNanoHTTPD.DefaultHandler {
+public class StartProfilingHandler extends RouterNanoHTTPD.DefaultHandler {
 
     @Override
     public String getText() {
@@ -58,7 +58,7 @@ public class ProfilerStartHandler extends RouterNanoHTTPD.DefaultHandler {
                     "{\"message\": \"Profiler running...\"");
             })
             .getOrElse(() -> newFixedLengthResponse(Status.SERVICE_UNAVAILABLE, "application/json",
-                "{\"cause\": \"Profiler wasn't started...\""));
+                "{\"cause\": \"Profiler was not attached...\""));
     }
 
     private Option<KanelaProfiler> getProfiler(UriResource uriResource) {

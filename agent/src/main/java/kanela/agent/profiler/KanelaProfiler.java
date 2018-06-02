@@ -2,6 +2,7 @@ package kanela.agent.profiler;
 
 import io.vavr.control.Option;
 import java.lang.instrument.Instrumentation;
+import kanela.agent.bootstrap.profiling.SamplingHandler;
 import kanela.agent.profiler.instrumentation.ProfilerInstrumenter;
 import kanela.agent.util.annotation.Experimental;
 import kanela.agent.util.conf.KanelaConfiguration.ProfilerConfig;
@@ -31,18 +32,34 @@ public class KanelaProfiler {
         return new KanelaProfiler(instrumentation, profilerConfig);
     }
 
-    public void start() {
-        checkEnable(this.profilerInstrumenter::activate,
+    public static void attach() {
+        SamplingHandler.setSamplingProvider(SamplingProviderImpl.instance());
+    }
+
+    public void activate() {
+        ifEnable(this.profilerInstrumenter::activate,
             () -> Logger.debug(() -> "Profiler is disabled"));
     }
 
+    public void deactivate() {
+        ifEnable(this.profilerInstrumenter::deactivate,
+            () -> Logger.debug(() -> "Profiler is disabled"));
+    }
+
+    public void start() {
+        ifEnable(() -> {
+            this.profilerInstrumenter.activate();
+            SamplingHandler.start();
+            }, () -> Logger.debug(() -> "Profiler is disabled"));
+    }
+
     public void stop() {
-        checkEnable(this.profilerInstrumenter::deactivate,
+        ifEnable(SamplingHandler::stop,
             () -> Logger.debug(() -> "Profiler is disabled"));
     }
 
     @SneakyThrows
-    public void checkEnable(Runnable runnable, Option<Runnable> fallback) {
+    public void ifEnable(Runnable runnable, Option<Runnable> fallback) {
         if (profilerConfig.getEnabled()) {
             runnable.run();
         } else {
@@ -51,13 +68,13 @@ public class KanelaProfiler {
     }
 
     @SneakyThrows
-    public void checkEnable(Runnable runnable) {
-        checkEnable(runnable, Option.none());
+    public void ifEnable(Runnable runnable) {
+        ifEnable(runnable, Option.none());
     }
 
     @SneakyThrows
-    public void checkEnable(Runnable runnable, Runnable fallback) {
-        checkEnable(runnable, Option.of(fallback));
+    public void ifEnable(Runnable runnable, Runnable fallback) {
+        ifEnable(runnable, Option.of(fallback));
     }
 
     //stop
