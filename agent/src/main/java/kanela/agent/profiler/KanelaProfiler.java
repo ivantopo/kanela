@@ -4,6 +4,7 @@ import io.vavr.control.Option;
 import java.lang.instrument.Instrumentation;
 import kanela.agent.bootstrap.profiling.SamplingHandler;
 import kanela.agent.profiler.instrumentation.ProfilerInstrumenter;
+import kanela.agent.profiler.sampling.SamplingProviderImpl;
 import kanela.agent.util.annotation.Experimental;
 import kanela.agent.util.conf.KanelaConfiguration.ProfilerConfig;
 import kanela.agent.util.log.Logger;

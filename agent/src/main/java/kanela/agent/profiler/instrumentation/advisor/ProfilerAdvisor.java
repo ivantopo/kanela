@@ -19,12 +19,12 @@ public class ProfilerAdvisor {
     }
 
     @OnMethodExit
-    public static void onMethodExit(@Enter long start, @MethodInfo String methodDescription) {
-        val timing = System.nanoTime() - start;
-        SamplingHandler.add(methodDescription, timing);
-        if (KanelaRandom.random.nextFloat() < 0.2)
+    public static void onMethodExit(@Enter long startTimeNs, @MethodInfo String methodDescription) {
+        val endTimeNs = System.nanoTime();
+        SamplingHandler.add(methodDescription, startTimeNs, endTimeNs);
+        if (KanelaRandom.random.nextFloat() < 0.05)
             System.out.println(String
-                .format("|Profiling| Method %s was executed in %10.2f ns.", methodDescription, (float) timing));
+                .format("|Profiling| Method %s was executed in %10.2f ns.", methodDescription, (float) (endTimeNs - startTimeNs)));
     }
 
     @Retention(RetentionPolicy.RUNTIME)

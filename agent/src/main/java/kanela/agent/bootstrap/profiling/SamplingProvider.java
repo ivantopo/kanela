@@ -1,20 +1,25 @@
 package kanela.agent.bootstrap.profiling;
 
+import java.util.Collections;
+import java.util.Map;
+
 public interface SamplingProvider {
 
-    void add(String methodSignature, Long time);
+    void add(String methodSignature, long startTimeNs, long endTimeNs);
     void clean();
     void start();
-    void stop();
+    Map<ThreadInfo, SamplingThread> stop();
 
     enum NoOp implements SamplingProvider {
 
         INSTANCE;
 
-        public void add(String methodSignature, Long time) {}
+        public void add(String methodSignature, long startTimeNs, long endTimeNs) {}
         public void clean() {}
         public void start() {}
-        public void stop() {}
+        public Map<ThreadInfo, SamplingThread> stop() {
+            return Collections.emptyMap();
+        }
     }
 
 }

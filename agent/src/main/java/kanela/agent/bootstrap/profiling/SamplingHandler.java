@@ -1,10 +1,11 @@
 package kanela.agent.bootstrap.profiling;
 
+import java.util.Map;
 import kanela.agent.bootstrap.profiling.SamplingProvider.NoOp;
 
 public final class SamplingHandler {
 
-    private volatile static SamplingProvider samplingProvider = NoOp.INSTANCE;
+    private static SamplingProvider samplingProvider = NoOp.INSTANCE;
 
     private SamplingHandler() {}
 
@@ -14,8 +15,8 @@ public final class SamplingHandler {
         }
     }
 
-    public static void add(String methodSignature, Long timing) {
-        samplingProvider.add(methodSignature, timing);
+    public static void add(String methodSignature, long startTimeNs, long endTimeNs) {
+        samplingProvider.add(methodSignature, startTimeNs, endTimeNs);
     }
 
     public static void clean() {
@@ -26,8 +27,8 @@ public final class SamplingHandler {
         samplingProvider.start();
     }
 
-    public static void stop() {
-        samplingProvider.stop();
+    public static Map<ThreadInfo, SamplingThread> stop() {
+        return samplingProvider.stop();
     }
 
 }
