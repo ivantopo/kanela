@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ import lombok.val;
 @Value
 public class SamplingProviderImpl implements SamplingProvider {
 
-    private static int MAX_DEPTH = 300;
+    public static Random random = new Random();
 
     private static class Holder {
         private static final SamplingProvider Instance = new SamplingProviderImpl();
@@ -41,6 +42,8 @@ public class SamplingProviderImpl implements SamplingProvider {
 
     public void add(String methodSignature, long startTimeNs, long endTimeNs) {
         if (!active) return;
+        if (random.nextFloat() < 0.05)
+            Logger.debug(() -> format("Sampling method %s which was executed in %10.2f ns.", methodSignature, (float) (endTimeNs - startTimeNs)));
         long startTimeProfilingNs = System.nanoTime();
         val sampling = samplingThread.get();
         accumulators
