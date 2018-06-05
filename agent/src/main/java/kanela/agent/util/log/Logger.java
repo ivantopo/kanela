@@ -35,7 +35,6 @@ public class Logger {
     static {
         Try.run(() -> Configurator
                 .fromResource("kanela-log.properties")
-                .writingThread("main")
                 .level(KanelaConfiguration.instance().getLogLevel())
                 .addWriter(new RollingFileWriter("kanela-agent.log", 2, true, new TimestampLabeler(), new StartupPolicy(), new SizePolicy(10 * 1024)))
                 .activate())
