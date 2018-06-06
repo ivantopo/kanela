@@ -42,9 +42,8 @@ public class SamplingProviderImpl implements SamplingProvider {
 
     public void add(String methodSignature, long startTimeNs, long endTimeNs) {
         if (!active) return;
-        if (random.nextFloat() < 0.05)
-            Logger.debug(() -> format("Sampling method %s which was executed in %10.2f ns.", methodSignature, (float) (endTimeNs - startTimeNs)));
         long startTimeProfilingNs = System.nanoTime();
+        debugSampling(methodSignature, startTimeNs, endTimeNs);
         val sampling = samplingThread.get();
         accumulators
             .computeIfAbsent(sampling, (k) -> SamplingThreadImpl.newOne())
@@ -72,6 +71,11 @@ public class SamplingProviderImpl implements SamplingProvider {
         return accumulators.entrySet()
             .stream()
             .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+    }
+
+    private static void debugSampling(String methodSignature, long startTimeNs, long endTimeNs) {
+        if (random.nextFloat() < 0.05)
+            Logger.debug(() -> format("Sampling method %s which was executed in %10.2f ns.", methodSignature, (float) (endTimeNs - startTimeNs)));
     }
 
     /**
