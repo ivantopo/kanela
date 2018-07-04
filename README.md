@@ -47,7 +47,7 @@ The modules currently available are shown below:
 |:------:|:------:|:----:|------------------
 | [Netty]  | stable | 4.0+ | with client and service side tracing and HTTP server metrics.
 | [Akka] | stable | 2.3-2.5 | for actor metrics and tracing inside a single JVM.
-| [Akka Remote] | stable | 2.3-2.5 | has now serialization and remoting metrics and is able. (**coming soon**)
+| [Akka Remote] | stable | 2.3-2.5 | has now serialization and remoting metrics and is able to trace messages across remote actor systems. (**coming soon**)
 | [Spring Web] | stable | 4.0+ | rings traces and metrics to your spring based applications.
 
 [Netty]:https://github.com/kamon-io/kamon-netty 
