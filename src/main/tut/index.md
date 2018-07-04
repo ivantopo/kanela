@@ -28,7 +28,7 @@ The modules currently available are shown below:
 | [Java Servlet]  | stable | 2.3+, 3.0+ | brings traces and metrics to your servlet based applications.
 | [Play Framework] | stable | 2.4-2.6 | with client and server side tracing.
 | [Akka HTTP] | stable | 10.0+ | with client and service side tracing and HTTP server metrics.
-| [Spring Web] | stable | 4.0+ | rings traces and metrics to your spring based applications.
+| [Spring Web] | stable | 4.0+ | brings traces and metrics to your spring based applications.
 
 
 [Java Servlet]:https://github.com/kamon-io/kamon-servlet
@@ -117,9 +117,9 @@ compile group: 'io.kamon', name: 'kamon-jdbc_2.12', version: "1.0.0"
 Finally, add the following JVM argument when starting your application in your IDE, 
 your `Maven`, `SBT` or `Gradle` application script, or your `java -jar` command:
 
-``
+```
 -javaagent:/path/to/the/kanela-agent.jar
-``
+```
  
 ![kanela-plain-jdbc][plain-jdbc]
 
@@ -135,9 +135,9 @@ wget -O kanela-agent.jar 'https://search.maven.org/remote_content?g=io.kamon&a=k
 Then, add the following JVM argument when starting your application in your IDE, 
 your `Maven`, `SBT` or `Gradle` application script, or your `java -jar` command:
 
-``
+```
 -javaagent:/path/to/the/kanela-bundle-agent.jar
-``
+```
 
 Finally, Simply Enjoy!
 
