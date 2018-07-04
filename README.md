@@ -83,7 +83,8 @@ your `Maven`, `SBT` or `Gradle` application script, or your `java -jar` command:
 ``
 -javaagent:/path/to/the/kanela-bundle-agent.jar
 ``
-Finally, simply Enjoy!
+
+Finally, Simply Enjoy!
 
 ## License
 
