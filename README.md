@@ -115,6 +115,7 @@ your `Maven`, `SBT` or `Gradle` application script, or your `java -jar` command:
  
 ![kanela-plain-jdbc][plain-jdbc]
 
+There it is! Our application is instrumented with the **Kanela** agent.
 
 #### Bundle
 First, download the **Kanela** bundle agent that includes all the **Kamon** instrumentation modules embedded within the agent:
