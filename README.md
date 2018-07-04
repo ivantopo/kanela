@@ -61,18 +61,29 @@ compile group: 'io.kamon', name: 'kamon-jdbc_2.12', version: "1.0.0"
 ```
 
 Finally, add the following JVM argument when starting your application in your IDE, 
-your Maven, Sbt or Gradle application script, or your java -jar command:
+your `Maven`, `SBT` or `Gradle` application script, or your `java -jar` command:
 
 ``
--javaagent:/path/to/the/kanela--agent.jar
+-javaagent:/path/to/the/kanela-agent.jar
 ``
-
  
 ![kanela-plain-jdbc][plain-jdbc]
 
 
 #### Bundle
+First, download the **Kanela** bundle agent that includes all the **Kamon** instrumentation modules embedded within the agent:
 
+``` 
+wget -O kanela-agent.jar 'https://search.maven.org/remote_content?g=io.kamon&a=kanela-bundle-agent&v=LATEST'
+```
+
+Then, add the following JVM argument when starting your application in your IDE, 
+your `Maven`, `SBT` or `Gradle` application script, or your `java -jar` command:
+
+``
+-javaagent:/path/to/the/kanela-bundle-agent.jar
+``
+Finally, simply Enjoy!
 
 ## License
 
