@@ -5,7 +5,11 @@ section: "home"
 ---
 
 # Kanela: The Kamon Instrumentation Agent
-[![Build Status](https://travis-ci.org/kamon-io/kamon-agent.svg?branch=master)](https://travis-ci.org/kamon-io/kamon-agent)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kamon-io/Kamon?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+![Build Status](https://travis-ci.org/kamon-io/kanela.svg?branch=master)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kamon/kanela-agent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.kamon/kanela-agent)
+[![Download](https://api.bintray.com/packages/kamon-io/releases/kanela/images/download.svg) ](https://bintray.com/kamon-io/releases/kanela/_latestVersion)
+
 
 **Kanela** is a Java Agent written in Java 8+ and powered by [ByteBuddy] with some additionally [ASM] features to provide a simple way to instrument applications running on the `JVM` and allow introduce [Kamon][1] features such as context propagation and metrics.
 
@@ -159,3 +163,7 @@ the License.
 [ByteBuddy]:http://bytebuddy.net/#/
 [ASM]:http://asm.ow2.org/
 [plain-jdbc]: microsite/img/kanela-plain-jdbc.png
+
+[1]:http://kamon.io
+[2]:https://github.com/kamon-io/kamon-agent-extensions
+[3]:http://bytebuddy.net/javadoc/1.7.9/net/bytebuddy/asm/Advice.html
