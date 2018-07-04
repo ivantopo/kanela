@@ -53,10 +53,10 @@ The modules currently available are shown below:
 
 | Framework  | Status | Versions  | Description            
 |:------:|:------:|:----:|------------------
-| [Netty]  | stable | 4.0+ | with client and service side tracing and HTTP server metrics.
+| [Netty]  | stable | 4.0+ | with client and service side tracing and HTTP server metrics. (**coming soon**)
 | [Akka] | stable | 2.3-2.5 | for actor metrics and tracing inside a single JVM.
 | [Akka Remote] | stable | 2.3-2.5 | has now serialization and remoting metrics and is able to trace messages across remote actor systems. (**coming soon**)
-| [Spring Web] | stable | 4.0+ | rings traces and metrics to your spring based applications.
+| [Spring Web] | stable | 4.0+ | brings traces and metrics to your spring based applications.
 
 [Netty]:https://github.com/kamon-io/kamon-netty 
 [Akka]:https://github.com/kamon-io/kamon-akka 
@@ -151,7 +151,7 @@ Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
 the License at
 
-    [http://www.apache.org/licenses/LICENSE-2.0]
+[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
