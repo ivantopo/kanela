@@ -11,25 +11,71 @@
 
 ### Modules ###
 
-The modules currently available are:
-  - [Akka](https://github.com/kamon-io/kamon-akka) for actor metrics and tracing inside a single JVM.
-  - [Akka HTTP](https://github.com/kamon-io/kamon-akka-http) with client and service side tracing and HTTP server metrics.
-  - [Futures](https://github.com/kamon-io/kamon-futures) bring automatic context propagation for Scala, Finagle and
-    Scalaz futures.
-  - [Executors](https://github.com/kamon-io/kamon-executors) context propagation and collects executor service metrics.
-  - [Play Framework](https://github.com/kamon-io/kamon-play) with client and server side tracing.
-  - [JDBC](https://github.com/kamon-io/kamon-jdbc) gives you metrics and tracing for JDBC statements execution and
-    Hikari pool metrics.
-  - [Logback](https://github.com/kamon-io/kamon-logback) comes with utilities for adding trace IDs to your logs and
-    instrumentation to keep context when using async appenders.
-  - [Spring Framework](https://github.com/kamon-io/kamon-spring) with client and service side tracing, context propagation and HTTP server metrics.
-  - [Cassandra Driver](https://github.com/kamon-io/kamon-casssandra) gives you metrics, context propagation and tracing for C* statements.
-  - [Annotation](https://github.com/kamon-io/kamon-annotation) provides a set of annotations that allow you to easily integrate Kamon's metrics and tracing facilities with your application.
-  - [Netty](https://github.com/kamon-io/kamon-netty) with client and service side tracing and HTTP server metrics.(**wip**)
-  - [OkHttp](https://github.com/kamon-io/kamon-okhttp) (**coming soon**)
-  - [Kafka](https://github.com/kamon-io/kamon-kafka) (**coming soon**)
-  - [Mongo](https://github.com/kamon-io/kamon-mongo) (**coming soon**)
-  - [Akka Remote](https://github.com/kamon-io/kamon-akka-remote) has now serialization and remoting metrics and is able. (**coming soon**)
+The modules currently available are shown below:
+
+#### Web Frameworks
+
+| Server  | Status | Versions  | Description            
+|:------:|:------:|:----:|------------------
+| [Java Servlet]  | stable | 2.3+, 3.0+ | brings traces and metrics to your servlet based applications.
+| [Play Framework] | stable | 2.4-2.6 | with client and server side tracing.
+| [Akka HTTP] | stable | 10.0+ | with client and service side tracing and HTTP server metrics.
+| [Spring Web] | stable | 4.0+ | rings traces and metrics to your spring based applications.
+
+
+[Java Servlet]:https://github.com/kamon-io/kamon-servlet
+[Play Framework]:https://github.com/kamon-io/kamon-play 
+[Akka HTTP]: https://github.com/kamon-io/kamon-akka-http
+[Spring Web]: https://github.com/kamon-io/kamon-spring
+
+#### Database Drivers/Frameworks
+
+| Driver  | Status | Versions  | Description            
+|:------:|:------:|:----:|------------------
+| [JDBC]  | stable | All | gives you metrics and tracing for JDBC statements execution and Hikari pool metrics.
+| [Cassandra Driver] | experimental | 3.2+ | gives you metrics, context propagation and tracing for C* statements.
+| [Mongo] | experimental | 3.2+ | (**coming soon**)
+
+[JDBC]:https://github.com/kamon-io/kamon-jdbc 
+[Cassandra Driver]:https://github.com/kamon-io/kamon-casssandra 
+[Mongo]:https://github.com/kamon-io/kamon-mongo
+
+
+#### Networking Frameworks
+
+| Framework  | Status | Versions  | Description            
+|:------:|:------:|:----:|------------------
+| [Netty]  | stable | 4.0+ | with client and service side tracing and HTTP server metrics.
+| [Akka] | stable | 2.3-2.5 | for actor metrics and tracing inside a single JVM.
+| [Akka Remote] | stable | 2.3-2.5 | has now serialization and remoting metrics and is able. (**coming soon**)
+| [Spring Web] | stable | 4.0+ | rings traces and metrics to your spring based applications.
+
+[Netty]:https://github.com/kamon-io/kamon-netty 
+[Akka]:https://github.com/kamon-io/kamon-akka 
+[Akka Remote]: https://github.com/kamon-io/kamon-akka-remote
+
+
+
+#### Others
+
+| Framework  | Status | Versions  | Description            
+|:------:|:------:|:----:|------------------
+| [Futures]  | stable | 2.10-2.12 | bring automatic context propagation for Scala, Finagle and Scalaz futures.
+| [Executors] | stable | All | context propagation and collects executor service metrics.
+| [Logback] | stable | 2.3-2.5 | comes with utilities for adding trace IDs to your logs and instrumentation to keep context when using async appenders.
+| [Annotation] | stable | 2.10-2.12 | provides a set of annotations that allow you to easily integrate Kamon's metrics and tracing facilities with your application.
+
+
+
+[Futures]:https://github.com/kamon-io/kamon-futures 
+[Executors]:https://github.com/kamon-io/kamon-executors 
+[Logback]:https://github.com/kamon-io/kamon-logback
+[Annotation]:https://github.com/kamon-io/kamon-annotation 
+
+
+Don’t see your preferred framework? We’re continually adding additional modules, check with our team to see if we can help or make your custom instrumentation with the **Kanela**
+instrumentation API.
+
 
 ### Flavors ###
 **Kanela** has 2 flavors, one is just the plain agent and gives us the option to add only the modules we need and 
