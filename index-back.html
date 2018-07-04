@@ -1,0 +1,133 @@
+<html><head><title>Kanela</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="kamon-io" /><meta name="description" content="Kanela: The Kamon Instrumentation Agent" /><meta name="og:image" content="/kanela/img/poster.png" /><meta name="og:title" content="Kanela" /><meta name="og:site_name" content="Kanela" /><meta name="og:url" content="" /><meta name="og:type" content="website" /><meta name="og:description" content="Kanela: The Kamon Instrumentation Agent" /><link rel="icon" type="image/png" href="/kanela/img/favicon.png" /><meta name="twitter:title" content="Kanela" /><meta name="twitter:image" content="img/poster.png" /><meta name="twitter:description" content="Kanela: The Kamon Instrumentation Agent" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/kanela/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/kanela/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/kanela/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/kanela/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/kanela/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/kanela/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/kanela/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/kanela/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/kanela/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/kanela/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/kanela/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/kanela/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/kanela/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/kanela/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/kanela/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/kanela/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/kanela/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/kanela/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/kanela/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/kanela/img/favicon310x150.png" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/kanela/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/kanela/css/style.css" /><link rel="stylesheet" href="/kanela/css/palette.css" /><link rel="stylesheet" href="/kanela/css/codemirror.css" /></head><body><header id="site-header"><div class="navbar-wrapper"><div class="container"><div class="row"><div class="col-xs-6"><a href="/kanela/" class="brand"><div class="icon-wrapper"><span>Kanela</span></div></a></div><div class="col-xs-6"><nav class="text-right"><ul class=""><li><a href="https://github.com/kamon-io/kamon-agent"><i class="fa fa-github"></i><span class="hidden-xs">GitHub</span></a></li></ul></nav></div></div></div></div><div class="jumbotron"><div class="container"><h1 class="text-center">Kanela: The Kamon Instrumentation Agent</h1><h2></h2><p class="text-center"><a href="https://github.com/kamon-io/kamon-agent" class="btn btn-outline-inverse">View on GitHub</a></p></div></div><div><ul class="horizontalNav">         <li><a class="" href="/kanela/interceptors.html">Interceptors</a></li>  <li><a class="" href="/kanela/mixins.html">Mixins</a></li>  <li><a class="" href="/kanela/bridges.html">Bridges</a></li>  <li><a class="" href="/kanela/changelog.html">Changelog</a></li>  <li><a class="" href="/kanela/license.html">License</a></li> </ul></div></header><main id="site-main"><section class="use"><div class="container"><div id="content"><h1 id="kanela-the-kamon-instrumentation-agent">Kanela: The Kamon Instrumentation Agent</h1>
+<p><a href="https://travis-ci.org/kamon-io/kamon-agent"><img src="https://travis-ci.org/kamon-io/kamon-agent.svg?branch=master" alt="Build Status" /></a></p>
+
+<p><strong>Kanela</strong> is a Java Agent written in Java 8+ and powered by <a href="http://bytebuddy.net/#/">ByteBuddy</a> with some additionally <a href="http://asm.ow2.org/">ASM</a> features to provide a simple way to instrument applications running on the <code class="highlighter-rouge">JVM</code> and allow introduce <a href="http://kamon.io">Kamon</a> features such as context propagation and metrics.</p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>The Instrumentation API is written in <em>Java</em> but there are <a href="https://github.com/kamon-io/kamon-agent-extensions">extensions modules</a> to define transformations in idiomatic manner for <em>Scala</em> and <em>Kotlin</em>.</p>
+
+<h3 id="time-spent-examplebytebuddy-advice-in-4-steps">Time Spent Example(<a href="http://bytebuddy.net/javadoc/1.7.9/net/bytebuddy/asm/Advice.html">ByteBuddy Advice</a>) in 4 steps</h3>
+
+<p>Suppose you have a simple worker that perform a simple operation:</p>
+
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_113995" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_113995" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_113995" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">import java.util.Random;
+
+public class Worker {
+  private final Random random = new Random();
+
+  public void performTask() {
+      Thread.sleep((long)(random.nextFloat() * 500));
+  }
+}
+</code></pre></div><div class="tab-pane" id="scala_1_113995" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">import scala.util.Random
+
+class Worker {
+  def performTask(): Unit = Thread.sleep((Random.nextFloat() * 500) toLong)
+}
+</code></pre></div></div></div>
+
+<h3 id="step-1-the-instrumentation">Step 1: The Instrumentation</h3>
+
+<p>We need introduce a transformation <code class="highlighter-rouge">Before</code> and <code class="highlighter-rouge">After</code> method execution in order to measure the time spent in the method execution:</p>
+
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_465755" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_465755" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_465755" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">
+public class TimeSpentInstrumentation extends KamonInstrumentation {
+    public MonitorInstrumentation() {
+        forTargetType(() -&gt; &quot;run.Worker&quot;, builder -&gt;
+            builder
+              .withAdvisorFor(method(&quot;performTask&quot;), () -&gt; PerformTaskMethodAdvisor.class)
+              .build()
+        );
+    }
+}
+</code></pre></div><div class="tab-pane" id="scala_1_465755" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">class TimeSpentInstrumentation extends KamonInstrumentation {
+  forTargetType(&quot;run.Worker&quot;) { builder ⇒
+    builder
+      .withAdvisorFor(method(&quot;performTask&quot;), classOf[PerformTaskMethodAdvisor])
+      .build()
+  }
+}
+</code></pre></div></div></div>
+
+<h3 id="step-2-the-method-advisor">Step 2: The Method <code class="highlighter-rouge">Advisor</code></h3>
+
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_411687" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_411687" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_411687" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class PerformTaskMethodAdvisor {
+    @OnMethodEnter
+    public static long onMethodEnter() {
+        return System.nanoTime(); // Return current time, entering as parameter in the onMethodExist
+    }
+
+    @OnMethodExit
+    public static void onMethodExit(@This MonitorAware instance, @Enter long start, @Origin String origin) {
+        System.out.println(String.format(&quot;Method %s was executed in %10.2f ns.&quot;, origin, (float) System.nanoTime() - start));
+    }
+}
+</code></pre></div><div class="tab-pane" id="scala_1_411687" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">object PerformTaskMethodAdvisor {
+  @OnMethodEnter
+  def onMethodEnter(): Long =
+    System.nanoTime() // Return current time, entering as parameter in the onMethodExist
+
+  @OnMethodExit
+  def onMethodExit(@This instance: MonitorAware, @Enter start: Long, @Origin origin: String): Unit =
+    println(s&quot;Method $origin was executed in ${System.nanoTime() - start} ns.&quot;)
+}
+</code></pre></div></div></div>
+
+<h3 id="step-3-the-configuration-module">Step 3: The Configuration Module</h3>
+
+<p>In our <code class="highlighter-rouge">reference.conf/application.conf</code> we need to define a new configuration module:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">kamon</span><span class="p">.</span><span class="nx">agent</span> <span class="p">{</span>
+  <span class="nx">show</span><span class="o">-</span><span class="nx">banner</span> <span class="o">=</span> <span class="kc">true</span>
+  <span class="nx">log</span><span class="o">-</span><span class="nx">level</span> <span class="o">=</span> <span class="s2">"INFO"</span>
+
+  <span class="nx">modules</span> <span class="p">{</span>
+    <span class="nx">time</span><span class="o">-</span><span class="nx">spent</span><span class="o">-</span><span class="nx">module</span> <span class="p">{</span>
+          <span class="nx">name</span> <span class="o">=</span> <span class="s2">"Time Spent Module"</span>
+          <span class="nx">instrumentations</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"instrumentation.TimeSpentInstrumentation"</span><span class="p">]</span>
+          <span class="nx">within</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"run..*"</span><span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<h3 id="step-4-run">Step 4: Run!</h3>
+
+<p>We make some calls to our <code class="highlighter-rouge">Worker</code> and also pass the <strong>Kanela</strong> agent as JVM parameter</p>
+
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_713123" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_713123" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_713123" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class TimeSpent {
+    public static void main(String... args) {
+        for(int i = 0; i &lt; 10; i++) {
+            new Worker().performTask();
+        }
+    }
+}
+</code></pre></div><div class="tab-pane" id="scala_1_713123" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">object TimeSpent extends App {
+  for(_ &lt;- 1 to 10) {
+    new Worker().performTask()
+  }
+}
+</code></pre></div></div></div>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>java -javaagent:kanela.jar -jar /path/to/our-application.jar
+</code></pre>
+</div>
+
+<p><img class="img-fluid" src="microsite/img/kamon.timespent.png" /></p>
+
+<p>There it is! Our application is instrumented with the <strong>Kanela</strong> agent.</p>
+
+<p>Some other configuration that you can define is indicated in the agent <a href="https://github.com/kamon-io/kamon-agent/blob/master/agent/src/main/resources/reference.conf"><code class="highlighter-rouge">reference.conf</code></a></p>
+
+<h2 id="lombok">Lombok</h2>
+<p>This project uses <a href="https://projectlombok.org/">Lombok</a> to reduce boilerplate. You can setup
+the <a href="https://plugins.jetbrains.com/plugin/6317">IntelliJ plugin</a> to add IDE support.</p>
+
+</div></div></section><section class="technologies"><div class="container"><div class="row"></div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><div class="col-xs-6"><p>Kanela is designed and developed by <a href="" target="_blank">kamon-io</a></p></div><div class="col-xs-6"><p class="text-right"><a href="https://github.com/kamon-io/kamon-agent"><span class="fa fa-github"></span>View on GitHub</a></p></div></div><div class="row"><div class="col-xs-6"><p>Website built with <a href="https://47deg.github.io/sbt-microsites/" target="_blank">Sbt-microsites</a> - © 2016 <a href="https://www.47deg.com/" target="_blank">47 Degrees</a></p></div></div></div></footer><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script><script src="/kanela/highlight/highlight.pack.js"></script><script>hljs.configure({
+languages:['scala','java','bash']
+});
+hljs.initHighlighting();
+             </script><script>((window.gitter = {}).chat = {}).options = {
+room: 'kamon-io/Kamon'};</script><script src="https://sidecar.gitter.im/dist/sidecar.v1.js"></script></body></html>
