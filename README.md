@@ -26,10 +26,10 @@ The modules currently available are:
   - [Cassandra Driver](https://github.com/kamon-io/kamon-casssandra) gives you metrics, context propagation and tracing for C* statements.
   - [Annotation](https://github.com/kamon-io/kamon-annotation) provides a set of annotations that allow you to easily integrate Kamon's metrics and tracing facilities with your application.
   - [Netty](https://github.com/kamon-io/kamon-netty) with client and service side tracing and HTTP server metrics.(**wip**)
-  - [OkHttp](https://github.com/kamon-io/kamon-okhttp) (**soon**)
-  - [Kafka](https://github.com/kamon-io/kamon-kafka) (**soon**)
-  - [Mongo](https://github.com/kamon-io/kamon-mongo) (**soon**)
-  - [Akka Remote](https://github.com/kamon-io/kamon-akka-remote) has now serialization and remoting metrics and is able. (**soon**)
+  - [OkHttp](https://github.com/kamon-io/kamon-okhttp) (**coming soon**)
+  - [Kafka](https://github.com/kamon-io/kamon-kafka) (**coming soon**)
+  - [Mongo](https://github.com/kamon-io/kamon-mongo) (**coming soon**)
+  - [Akka Remote](https://github.com/kamon-io/kamon-akka-remote) has now serialization and remoting metrics and is able. (**coming soon**)
 
 ### Flavors ###
 **Kanela** has 2 flavors, one is just the plain agent and gives us the option to add only the modules we need and 
