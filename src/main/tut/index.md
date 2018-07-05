@@ -17,6 +17,63 @@ section: "home"
 
 The Instrumentation API is written in *Java* but there are [extensions modules][2] to define transformations in idiomatic manner for *Scala* and *Kotlin*.
 
+
+### Flavors ###
+**Kanela** has 2 flavors, one is just the plain agent and gives us the option to add only the modules we need and 
+the other is for those who want **APM-like experience** from the very beginning that contains all the modules embedded within the agent.
+
+#### Plain
+First, download the **Kanela** plain agent:
+
+``` 
+wget -O kanela-agent.jar 'https://search.maven.org/remote_content?g=io.kamon&a=kanela-agent&v=LATEST'
+```
+
+Then, simply add the instrumentation modules that you want in your `build.sbt`, `pom.xml` or `gradle.build` file:
+
+```
+libraryDependencies += "io.kamon" %% "kamon-jdbc" % "1.0.0"
+```
+
+```xml
+<dependency>
+    <groupId>io.kamon</groupId>
+    <artifactId>kamon-jdbc_2.12</artifactId>
+    <version>1.0.0</version>
+</dependency>
+``` 
+
+```
+compile group: 'io.kamon', name: 'kamon-jdbc_2.12', version: "1.0.0"
+```
+
+Finally, add the following JVM argument when starting your application in your IDE, 
+your `Maven`, `SBT` or `Gradle` application script, or your `java -jar` command:
+
+```
+-javaagent:/path/to/the/kanela-agent.jar
+```
+ 
+![kanela-plain-jdbc][plain-jdbc]
+
+There it is! Our application is instrumented with the **Kanela** agent.
+
+#### Bundle
+First, download the **Kanela** bundle agent that includes all the **Kamon** instrumentation modules embedded within the agent:
+
+``` 
+wget -O kanela-agent.jar 'https://search.maven.org/remote_content?g=io.kamon&a=kanela-bundle-agent&v=LATEST'
+```
+
+Then, add the following JVM argument when starting your application in your IDE, 
+your `Maven`, `SBT` or `Gradle` application script, or your `java -jar` command:
+
+```
+-javaagent:/path/to/the/kanela-bundle-agent.jar
+```
+
+Finally, Simply Enjoy!
+
 ### Modules ###
 
 The modules currently available are shown below:
@@ -84,62 +141,6 @@ The modules currently available are shown below:
 Don’t see your preferred framework? We’re continually adding additional modules, check with our team to see if we can help or make your custom instrumentation with the **Kanela**
 instrumentation API.
 
-
-### Flavors ###
-**Kanela** has 2 flavors, one is just the plain agent and gives us the option to add only the modules we need and 
-the other is for those who want **APM-like experience** from the very beginning that contains all the modules embedded within the agent.
-
-#### Plain
-First, download the **Kanela** plain agent:
-
-``` 
-wget -O kanela-agent.jar 'https://search.maven.org/remote_content?g=io.kamon&a=kanela-agent&v=LATEST'
-```
-
-Then, simply add the instrumentation modules that you want in your `build.sbt`, `pom.xml` or `gradle.build` file:
-
-```
-libraryDependencies += "io.kamon" %% "kamon-jdbc" % "1.0.0"
-```
-
-```xml
-<dependency>
-    <groupId>io.kamon</groupId>
-    <artifactId>kamon-jdbc_2.12</artifactId>
-    <version>1.0.0</version>
-</dependency>
-``` 
-
-```
-compile group: 'io.kamon', name: 'kamon-jdbc_2.12', version: "1.0.0"
-```
-
-Finally, add the following JVM argument when starting your application in your IDE, 
-your `Maven`, `SBT` or `Gradle` application script, or your `java -jar` command:
-
-```
--javaagent:/path/to/the/kanela-agent.jar
-```
- 
-![kanela-plain-jdbc][plain-jdbc]
-
-There it is! Our application is instrumented with the **Kanela** agent.
-
-#### Bundle
-First, download the **Kanela** bundle agent that includes all the **Kamon** instrumentation modules embedded within the agent:
-
-``` 
-wget -O kanela-agent.jar 'https://search.maven.org/remote_content?g=io.kamon&a=kanela-bundle-agent&v=LATEST'
-```
-
-Then, add the following JVM argument when starting your application in your IDE, 
-your `Maven`, `SBT` or `Gradle` application script, or your `java -jar` command:
-
-```
--javaagent:/path/to/the/kanela-bundle-agent.jar
-```
-
-Finally, Simply Enjoy!
 
 ## License
 
