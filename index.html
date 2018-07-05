@@ -10,6 +10,62 @@
 
 <p>The Instrumentation API is written in <em>Java</em> but there are <a href="https://github.com/kamon-io/kamon-agent-extensions">extensions modules</a> to define transformations in idiomatic manner for <em>Scala</em> and <em>Kotlin</em>.</p>
 
+<h3 id="flavors">Flavors</h3>
+<p><strong>Kanela</strong> has 2 flavors, one is just the plain agent and gives us the option to add only the modules we need and 
+the other is for those who want <strong>APM-like experience</strong> from the very beginning that contains all the modules embedded within the agent.</p>
+
+<h4 id="plain">Plain</h4>
+<p>First, download the <strong>Kanela</strong> plain agent:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wget -O kanela-agent.jar 'https://search.maven.org/remote_content?g=io.kamon&amp;a=kanela-agent&amp;v=LATEST'
+</code></pre>
+</div>
+
+<p>Then, simply add the instrumentation modules that you want in your <code class="highlighter-rouge">build.sbt</code>, <code class="highlighter-rouge">pom.xml</code> or <code class="highlighter-rouge">gradle.build</code> file:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>libraryDependencies += "io.kamon" %% "kamon-jdbc" % "1.0.0"
+</code></pre>
+</div>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>io.kamon<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>kamon-jdbc_2.12<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>compile group: 'io.kamon', name: 'kamon-jdbc_2.12', version: "1.0.0"
+</code></pre>
+</div>
+
+<p>Finally, add the following JVM argument when starting your application in your IDE, 
+your <code class="highlighter-rouge">Maven</code>, <code class="highlighter-rouge">SBT</code> or <code class="highlighter-rouge">Gradle</code> application script, or your <code class="highlighter-rouge">java -jar</code> command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-javaagent:/path/to/the/kanela-agent.jar
+</code></pre>
+</div>
+
+<p><img src="microsite/img/kanela-plain-jdbc.png" alt="kanela-plain-jdbc" /></p>
+
+<p>There it is! Our application is instrumented with the <strong>Kanela</strong> agent.</p>
+
+<h4 id="bundle">Bundle</h4>
+<p>First, download the <strong>Kanela</strong> bundle agent that includes all the <strong>Kamon</strong> instrumentation modules embedded within the agent:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wget -O kanela-agent.jar 'https://search.maven.org/remote_content?g=io.kamon&amp;a=kanela-bundle-agent&amp;v=LATEST'
+</code></pre>
+</div>
+
+<p>Then, add the following JVM argument when starting your application in your IDE, 
+your <code class="highlighter-rouge">Maven</code>, <code class="highlighter-rouge">SBT</code> or <code class="highlighter-rouge">Gradle</code> application script, or your <code class="highlighter-rouge">java -jar</code> command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>-javaagent:/path/to/the/kanela-bundle-agent.jar
+</code></pre>
+</div>
+
+<p>Finally, Simply Enjoy!</p>
+
 <h3 id="modules">Modules</h3>
 
 <p>The modules currently available are shown below:</p>
@@ -166,62 +222,6 @@
 
 <p>Don’t see your preferred framework? We’re continually adding additional modules, check with our team to see if we can help or make your custom instrumentation with the <strong>Kanela</strong>
 instrumentation API.</p>
-
-<h3 id="flavors">Flavors</h3>
-<p><strong>Kanela</strong> has 2 flavors, one is just the plain agent and gives us the option to add only the modules we need and 
-the other is for those who want <strong>APM-like experience</strong> from the very beginning that contains all the modules embedded within the agent.</p>
-
-<h4 id="plain">Plain</h4>
-<p>First, download the <strong>Kanela</strong> plain agent:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>wget -O kanela-agent.jar 'https://search.maven.org/remote_content?g=io.kamon&amp;a=kanela-agent&amp;v=LATEST'
-</code></pre>
-</div>
-
-<p>Then, simply add the instrumentation modules that you want in your <code class="highlighter-rouge">build.sbt</code>, <code class="highlighter-rouge">pom.xml</code> or <code class="highlighter-rouge">gradle.build</code> file:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>libraryDependencies += "io.kamon" %% "kamon-jdbc" % "1.0.0"
-</code></pre>
-</div>
-
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dependency&gt;</span>
-    <span class="nt">&lt;groupId&gt;</span>io.kamon<span class="nt">&lt;/groupId&gt;</span>
-    <span class="nt">&lt;artifactId&gt;</span>kamon-jdbc_2.12<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-</code></pre>
-</div>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>compile group: 'io.kamon', name: 'kamon-jdbc_2.12', version: "1.0.0"
-</code></pre>
-</div>
-
-<p>Finally, add the following JVM argument when starting your application in your IDE, 
-your <code class="highlighter-rouge">Maven</code>, <code class="highlighter-rouge">SBT</code> or <code class="highlighter-rouge">Gradle</code> application script, or your <code class="highlighter-rouge">java -jar</code> command:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>-javaagent:/path/to/the/kanela-agent.jar
-</code></pre>
-</div>
-
-<p><img src="microsite/img/kanela-plain-jdbc.png" alt="kanela-plain-jdbc" /></p>
-
-<p>There it is! Our application is instrumented with the <strong>Kanela</strong> agent.</p>
-
-<h4 id="bundle">Bundle</h4>
-<p>First, download the <strong>Kanela</strong> bundle agent that includes all the <strong>Kamon</strong> instrumentation modules embedded within the agent:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>wget -O kanela-agent.jar 'https://search.maven.org/remote_content?g=io.kamon&amp;a=kanela-bundle-agent&amp;v=LATEST'
-</code></pre>
-</div>
-
-<p>Then, add the following JVM argument when starting your application in your IDE, 
-your <code class="highlighter-rouge">Maven</code>, <code class="highlighter-rouge">SBT</code> or <code class="highlighter-rouge">Gradle</code> application script, or your <code class="highlighter-rouge">java -jar</code> command:</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>-javaagent:/path/to/the/kanela-bundle-agent.jar
-</code></pre>
-</div>
-
-<p>Finally, Simply Enjoy!</p>
 
 <h2 id="license">License</h2>
 
