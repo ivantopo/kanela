@@ -5,7 +5,7 @@
 
 <p>Suppose you have a simple worker that perform a simple operation:</p>
 
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_334549" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_334549" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_334549" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">import java.util.Random;
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_399189" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_399189" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_399189" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">import java.util.Random;
 
 public class Worker {
   private final Random random = new Random();
@@ -14,7 +14,7 @@ public class Worker {
       Thread.sleep((long)(random.nextFloat() * 500));
   }
 }
-</code></pre></div><div class="tab-pane" id="scala_1_334549" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">import scala.util.Random
+</code></pre></div><div class="tab-pane" id="scala_1_399189" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">import scala.util.Random
 
 class Worker {
   def performTask(): Unit = Thread.sleep((Random.nextFloat() * 500) toLong)
@@ -25,7 +25,7 @@ class Worker {
 
 <p>We need introduce a transformation <code class="highlighter-rouge">Before</code> and <code class="highlighter-rouge">After</code> method execution in order to measure the time spent in the method execution:</p>
 
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_440305" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_440305" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_440305" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class TimeSpentInstrumentation extends KamonInstrumentation {
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_771228" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_771228" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_771228" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class TimeSpentInstrumentation extends KamonInstrumentation {
     public MonitorInstrumentation() {
         forTargetType(() -&gt; &quot;run.Worker&quot;, builder -&gt;
             builder
@@ -34,7 +34,7 @@ class Worker {
         );
     }
 }
-</code></pre></div><div class="tab-pane" id="scala_1_440305" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">class TimeSpentInstrumentation extends KamonInstrumentation {
+</code></pre></div><div class="tab-pane" id="scala_1_771228" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">class TimeSpentInstrumentation extends KamonInstrumentation {
   forTargetType(&quot;run.Worker&quot;) { builder ⇒
     builder
       .withInterceptorFor(method(&quot;performTask&quot;), PerformTaskMethodInterceptor)
@@ -45,7 +45,7 @@ class Worker {
 
 <h3 id="step-2-the-method-interceptor">Step 2: The Method <code class="highlighter-rouge">Interceptor</code></h3>
 
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_562406" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_562406" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_562406" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class PerformTaskMethodInterceptor {
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_815055" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_815055" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_815055" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class PerformTaskMethodInterceptor {
     @RuntimeType
     public Object around(@SuperCall Callable&lt;?&gt; callable, @Origin String origin) {
         final long start = System.nanoTime();
@@ -57,7 +57,7 @@ class Worker {
         }
     }
 }
-</code></pre></div><div class="tab-pane" id="scala_1_562406" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">object PerformTaskMethodInterceptor {
+</code></pre></div><div class="tab-pane" id="scala_1_815055" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">object PerformTaskMethodInterceptor {
   @RuntimeType
   def around(@SuperCall callable: Callable[_], @Origin origin:String): Any = {
     val start = System.nanoTime()
@@ -91,14 +91,14 @@ class Worker {
 
 <p>We make some calls to our <code class="highlighter-rouge">Worker</code> and also pass the <strong>Kanela</strong> agent as JVM parameter</p>
 
-<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_111624" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_111624" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_111624" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class TimeSpent {
+<div class="code-example"><ul class="nav nav-tabs language-tab justify-content-end" role="tablist"><li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#java_0_855276" role="tab">Java</a></li><li class="nav-item"><a class="nav-link" data-toggle="tab" href="#scala_1_855276" role="tab">Scala</a></li></ul><div class="tab-content"><div class="tab-pane active" id="java_0_855276" role="tabpanel"><pre class="line-numbers language-java"><code class="language-java">public class TimeSpent {
     public static void main(String... args) {
         for(int i = 0; i &lt; 10; i++) {
             new Worker().performTask();
         }
     }
 }
-</code></pre></div><div class="tab-pane" id="scala_1_111624" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">object TimeSpent extends App {
+</code></pre></div><div class="tab-pane" id="scala_1_855276" role="tabpanel"><pre class="line-numbers language-scala"><code class="language-scala">object TimeSpent extends App {
   for(_ &lt;- 1 to 10) {
     new Worker().performTask()
   }

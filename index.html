@@ -11,7 +11,7 @@
 <p>The Instrumentation API is written in <em>Java</em> but there are <a href="https://github.com/kamon-io/kamon-agent-extensions">extensions modules</a> to define transformations in idiomatic manner for <em>Scala</em> and <em>Kotlin</em>.</p>
 
 <h3 id="flavors">Flavors</h3>
-<p><strong>Kanela</strong> has 2 flavors, one is just the plain agent and gives us the option to add only the modules we need and 
+<p><strong>Kanela</strong> has 2 flavors, one is just the plain agent and gives us the option to add only the modules we need and
 the other is for those who want <strong>APM-like experience</strong> from the very beginning that contains all the modules embedded within the agent.</p>
 
 <h4 id="plain">Plain</h4>
@@ -39,7 +39,7 @@ the other is for those who want <strong>APM-like experience</strong> from the ve
 </code></pre>
 </div>
 
-<p>Finally, add the following JVM argument when starting your application in your IDE, 
+<p>Finally, add the following JVM argument when starting your application in your IDE,
 your <code class="highlighter-rouge">Maven</code>, <code class="highlighter-rouge">SBT</code> or <code class="highlighter-rouge">Gradle</code> application script, or your <code class="highlighter-rouge">java -jar</code> command:</p>
 
 <div class="highlighter-rouge"><pre class="highlight"><code>-javaagent:/path/to/the/kanela-agent.jar
@@ -53,7 +53,7 @@ your <code class="highlighter-rouge">Maven</code>, <code class="highlighter-roug
 <h4 id="bundle">Bundle</h4>
 <p>First, download the <strong>Kanela</strong> bundle agent that includes all the <strong>Kamon</strong> instrumentation modules embedded within the agent:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>wget -O kanela-agent.jar 'https://search.maven.org/remote_content?g=io.kamon&amp;a=kanela-bundle-agent&amp;v=LATEST'
+<div class="highlighter-rouge"><pre class="highlight"><code>wget -O kanela-agent.jar 'https://search.maven.org/remote_content?g=io.kamon&amp;a=kanela-agent-bundle&amp;v=LATEST'
 </code></pre>
 </div>
 
